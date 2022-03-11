@@ -1,4 +1,4 @@
-# @bahmutov/cypress-code-coverage
+# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-9.5.1-brightgreen)
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
