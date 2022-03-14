@@ -7,6 +7,11 @@ const { filterSpecsFromCoverage } = require('./support-utils')
 
 dayjs.extend(duration)
 
+function getCoverageConfig() {
+  const env = Cypress.env()
+  return env.coverage || {}
+}
+
 /**
  * Sends collected code coverage object to the backend code
  * via "cy.task".
@@ -14,11 +19,31 @@ dayjs.extend(duration)
 const sendCoverage = (coverage, pathname = '/') => {
   logMessage(`Saving code coverage for **${pathname}**`)
 
-  const withoutSpecs = filterSpecsFromCoverage(coverage)
-  const appCoverageOnly = filterSupportFilesFromCoverage(withoutSpecs)
+  let filteredCoverage = coverage
+
+  const config = getCoverageConfig()
+
+  // by default we do not filter anything from the code coverage object
+  // if the user gives a list of patters to filter, we filter the coverage object
+  if (config.exclude) {
+    const filterOut = Cypress._.isString(config.exclude)
+      ? [config.exclude]
+      : config.exclude
+
+    filteredCoverage = Cypress._.omitBy(coverage, (fileCoverage, filename) => {
+      return filterOut.some((pattern) => {
+        if (pattern.includes('*')) {
+          return Cypress.minimatch(filename, pattern)
+        }
+        return filename.endsWith(pattern)
+      })
+    })
+    // const withoutSpecs = filterSpecsFromCoverage(coverage)
+    // filteredCoverage = filterSupportFilesFromCoverage(withoutSpecs)
+  }
 
   // stringify coverage object for speed
-  cy.task('combineCoverage', JSON.stringify(appCoverageOnly), {
+  cy.task('combineCoverage', JSON.stringify(filteredCoverage), {
     log: false,
   })
 }

@@ -301,6 +301,20 @@ See example [examples/all-files](./examples/all-files)
 
 You can exclude parts of the code or entire files from the code coverage report. See [Istanbul guide](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md). Common cases:
 
+### Filter files
+
+Specify the list of files to exclude from the saved coverage report using `cypress.json`
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": ["support/commands.js", "utils/*/*.js"]
+    }
+  }
+}
+```
+
 ### Exclude "else" branch
 
 When running code only during Cypress tests, the "else" branch will never be hit. Thus we should exclude it from the branch coverage computation:
