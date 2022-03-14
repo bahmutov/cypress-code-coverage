@@ -1,0 +1,21 @@
+{
+  "name": "example-multiple-files",
+  "description": "Multiple specs",
+  "scripts": {
+    "start": "../../node_modules/.bin/parcel serve index.html",
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "dev": "../../node_modules/.bin/start-test 1234 cy:open",
+    "e2e": "../../node_modules/.bin/start-test 1234 cy:run"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src"
+    ],
+    "excludeAfterRemap": true
+  },
+  "devDependencies": {
+    "@babel/core": "7.9.0"
+  }
+}
