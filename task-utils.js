@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const {
   combineNycOptions,
   defaultNycOptions,
-  fileCoveragePlaceholder
+  fileCoveragePlaceholder,
 } = require('./common-utils')
 
 function readNycOptions(workingDirectory) {
@@ -69,7 +69,7 @@ function readNycOptions(workingDirectory) {
     nycrcYaml,
     nycrcYml,
     nycConfig,
-    pkgNycOptions
+    pkgNycOptions,
   )
   debug('combined NYC options %o', nycOptions)
 
@@ -93,7 +93,7 @@ function checkAllPathsNotFound(nycFilename) {
   debug(
     'in file %s all files are not found? %o',
     nycFilename,
-    allFilesAreMissing
+    allFilesAreMissing,
   )
   return allFilesAreMissing
 }
@@ -108,13 +108,13 @@ function showNycInfo(nycFilename) {
   if (!coverageKeys.length) {
     console.error(
       '⚠️ file %s has no coverage information',
-      chalk.yellow(nycFilename)
+      chalk.yellow(nycFilename),
     )
     console.error(
       'Did you forget to instrument your web application? Read %s',
       chalk.blue(
-        'https://github.com/cypress-io/code-coverage#instrument-your-application'
-      )
+        'https://github.com/cypress-io/code-coverage#instrument-your-application',
+      ),
     )
     return
   }
@@ -180,7 +180,7 @@ function resolveRelativePaths(nycFilename) {
     writeFileSync(
       nycFilename,
       JSON.stringify(nycCoverage, null, 2) + '\n',
-      'utf8'
+      'utf8',
     )
   }
 }
@@ -218,11 +218,11 @@ function findCommonRoot(filepaths) {
     commonPrefix.push(part)
 
     const removedPrefixNames = filepaths.map((filepath) =>
-      filepath.slice(prefix.length)
+      filepath.slice(prefix.length),
     )
     debug('removedPrefix %o', removedPrefixNames)
     const foundAllPaths = removedPrefixNames.every((filepath) =>
-      existsSync(join(cwd, filepath))
+      existsSync(join(cwd, filepath)),
     )
     debug('all files found at %s? %o', prefix, foundAllPaths)
     if (foundAllPaths) {
@@ -248,7 +248,7 @@ function tryFindingLocalFiles(nycFilename) {
   debug(
     'found common folder %s that matches current working directory %s',
     commonFolder,
-    cwd
+    cwd,
   )
   const length = commonFolder.length
   let changed
@@ -270,7 +270,7 @@ function tryFindingLocalFiles(nycFilename) {
     writeFileSync(
       nycFilename,
       JSON.stringify(nycCoverage, null, 2) + '\n',
-      'utf8'
+      'utf8',
     )
   }
 }
@@ -284,12 +284,12 @@ function findSourceFiles(nycOptions) {
     all: nycOptions.all,
     include: nycOptions.include,
     exclude: nycOptions.exclude,
-    extension: nycOptions.extension
+    extension: nycOptions.extension,
   })
 
   if (!Array.isArray(nycOptions.extension)) {
     console.error(
-      'Expected NYC "extension" option to be a list of file extensions'
+      'Expected NYC "extension" option to be a list of file extensions',
     )
     console.error(nycOptions)
     return []
@@ -348,7 +348,7 @@ function includeAllFiles(nycFilename, nycOptions) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
   const coverageKeys = Object.keys(nycCoverage)
   const coveredPaths = coverageKeys.map((key) =>
-    nycCoverage[key].path.replace(/\\/g, '/')
+    nycCoverage[key].path.replace(/\\/g, '/'),
   )
 
   debug('coverage has %d record(s)', coveredPaths.length)
@@ -378,7 +378,7 @@ function includeAllFiles(nycFilename, nycOptions) {
     writeFileSync(
       nycFilename,
       JSON.stringify(nycCoverage, null, 2) + '\n',
-      'utf8'
+      'utf8',
     )
   }
 }
@@ -389,5 +389,5 @@ module.exports = {
   checkAllPathsNotFound,
   tryFindingLocalFiles,
   readNycOptions,
-  includeAllFiles
+  includeAllFiles,
 }

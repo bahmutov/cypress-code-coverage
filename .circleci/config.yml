@@ -2,7 +2,7 @@
 version: 2.1
 orbs:
   # https://github.com/cypress-io/circleci-orb
-  cypress: cypress-io/cypress@1.26.0 # used to run e2e tests
+  cypress: cypress-io/cypress@1.29.0 # used to run e2e tests
   node: circleci/node@1.1.6 # used to publish new NPM version
   win: circleci/windows@2 # run a test job on Windows
 
@@ -184,29 +184,29 @@ workflows:
                   ../../node_modules/.bin/only-covered main.js
                 working_directory: examples/before-all-visit
 
-      - cypress/run:
-          attach-workspace: true
-          name: example-docker-paths
-          requires:
-            - cypress/install
-          # there are no jobs to follow this one
-          # so no need to save the workspace files (saves time)
-          no-workspace: true
-          working_directory: examples/docker-paths
-          command: '../../node_modules/.bin/cypress run'
-          post-steps:
-            # store the created coverage report folder
-            # you can click on it in the CircleCI UI
-            # to see live static HTML site
-            - store_artifacts:
-                path: examples/docker-paths/coverage
-            - run:
-                name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/check-coverage second.js
-                  ../../node_modules/.bin/only-covered main.js second.js
-                working_directory: examples/docker-paths
+      # - cypress/run:
+      #     attach-workspace: true
+      #     name: example-docker-paths
+      #     requires:
+      #       - cypress/install
+      #     # there are no jobs to follow this one
+      #     # so no need to save the workspace files (saves time)
+      #     no-workspace: true
+      #     working_directory: examples/docker-paths
+      #     command: '../../node_modules/.bin/cypress run'
+      #     post-steps:
+      #       # store the created coverage report folder
+      #       # you can click on it in the CircleCI UI
+      #       # to see live static HTML site
+      #       - store_artifacts:
+      #           path: examples/docker-paths/coverage
+      #       - run:
+      #           name: Check code coverage 📈
+      #           command: |
+      #             ../../node_modules/.bin/check-coverage main.js
+      #             ../../node_modules/.bin/check-coverage second.js
+      #             ../../node_modules/.bin/only-covered main.js second.js
+      #           working_directory: examples/docker-paths
 
       - cypress/run:
           attach-workspace: true
@@ -237,40 +237,40 @@ workflows:
                   ../../node_modules/.bin/only-covered main.ts calc.ts
                 working_directory: examples/ts-example
 
-      - cypress/run:
-          attach-workspace: true
-          name: example-use-webpack
-          requires:
-            - cypress/install
-          # there are no jobs to follow this one
-          # so no need to save the workspace files (saves time)
-          no-workspace: true
-          working_directory: examples/use-webpack
-          build: npm run build
-          start: npm start
-          wait-on: 'http://localhost:5000'
-          command: '../../node_modules/.bin/cypress run'
-          # wrong path when using working_directory
-          # https://github.com/cypress-io/circleci-orb/issues/265
-          # store screenshots and videos
-          # store_artifacts: true
-          post-steps:
-            - store_artifacts:
-                path: examples/use-webpack/cypress/videos
-            - store_artifacts:
-                path: examples/use-webpack/cypress/screenshots
-            # store the created coverage report folder
-            # you can click on it in the CircleCI UI
-            # to see live static HTML site
-            - store_artifacts:
-                path: examples/use-webpack/coverage
-            - run:
-                name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage src/index.js
-                  ../../node_modules/.bin/check-coverage src/calc.js
-                  ../../node_modules/.bin/only-covered src/index.js src/calc.js
-                working_directory: examples/use-webpack
+      # - cypress/run:
+      #     attach-workspace: true
+      #     name: example-use-webpack
+      #     requires:
+      #       - cypress/install
+      #     # there are no jobs to follow this one
+      #     # so no need to save the workspace files (saves time)
+      #     no-workspace: true
+      #     working_directory: examples/use-webpack
+      #     build: npm run build
+      #     start: npm start
+      #     wait-on: 'http://localhost:5000'
+      #     command: '../../node_modules/.bin/cypress run'
+      #     # wrong path when using working_directory
+      #     # https://github.com/cypress-io/circleci-orb/issues/265
+      #     # store screenshots and videos
+      #     # store_artifacts: true
+      #     post-steps:
+      #       - store_artifacts:
+      #           path: examples/use-webpack/cypress/videos
+      #       - store_artifacts:
+      #           path: examples/use-webpack/cypress/screenshots
+      #       # store the created coverage report folder
+      #       # you can click on it in the CircleCI UI
+      #       # to see live static HTML site
+      #       - store_artifacts:
+      #           path: examples/use-webpack/coverage
+      #       - run:
+      #           name: Check code coverage 📈
+      #           command: |
+      #             ../../node_modules/.bin/check-coverage src/index.js
+      #             ../../node_modules/.bin/check-coverage src/calc.js
+      #             ../../node_modules/.bin/only-covered src/index.js src/calc.js
+      #           working_directory: examples/use-webpack
 
       - cypress/run:
           attach-workspace: true

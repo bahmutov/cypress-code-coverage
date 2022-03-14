@@ -2,5 +2,10 @@
   "integrationFolder": ".",
   "testFiles": "**/spec.js",
   "supportFile": "support.js",
-  "pluginsFile": "plugins.js"
+  "pluginsFile": "plugins.js",
+  "env": {
+    "coverage": {
+      "exclude": true
+    }
+  }
 }

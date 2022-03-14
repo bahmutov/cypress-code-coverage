@@ -1,10 +1,10 @@
 {
   "fixturesFolder": false,
   "pluginsFile": "cypress/plugins/index.js",
-  "testFiles": ["spec-a.js"],
+  "baseUrl": "http://localhost:1234",
   "env": {
     "coverage": {
-      "exclude": true
+      "exclude": "support/commands.js"
     }
   }
 }

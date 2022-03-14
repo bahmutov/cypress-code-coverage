@@ -1,4 +1,4 @@
-# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-9.5.1-brightgreen)
+# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-9.5.1-brightgreen) [![CircleCI](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main.svg?style=svg)](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main)
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
@@ -131,7 +131,7 @@ module.exports = (on, config) => {
   require('@bahmutov/cypress-code-coverage/task')(on, config)
   on(
     'file:preprocessor',
-    require('@bahmutov/cypress-code-coverage/use-babelrc')
+    require('@bahmutov/cypress-code-coverage/use-babelrc'),
   )
   return config
 }
@@ -150,7 +150,7 @@ module.exports = (on, config) => {
   require('@bahmutov/cypress-code-coverage/task')(on, config)
   on(
     'file:preprocessor',
-    require('@bahmutov/cypress-code-coverage/use-browserify-istanbul')
+    require('@bahmutov/cypress-code-coverage/use-browserify-istanbul'),
   )
   return config
 }
@@ -300,6 +300,44 @@ See example [examples/all-files](./examples/all-files)
 ## Exclude code
 
 You can exclude parts of the code or entire files from the code coverage report. See [Istanbul guide](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md). Common cases:
+
+### Filter files
+
+Specify the list of files to exclude from the saved coverage report using `cypress.json`
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": ["support/commands.js", "utils/*/*.js"]
+    }
+  }
+}
+```
+
+By default, no files are filtered out from the code coverage object, which is equivalent to:
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": false
+    }
+  }
+}
+```
+
+You can try excluding the default integration and support files only using
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": true
+    }
+  }
+}
+```
 
 ### Exclude "else" branch
 

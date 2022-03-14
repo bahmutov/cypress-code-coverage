@@ -24,10 +24,10 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
 
   const isTestFile = (filename) => {
     const matchedPattern = testFilePatterns.some((specPattern) =>
-      Cypress.minimatch(filename, specPattern)
+      Cypress.minimatch(filename, specPattern),
     )
     const matchedEndOfPath = testFilePatterns.some((specPattern) =>
-      filename.endsWith(specPattern)
+      filename.endsWith(specPattern),
     )
     return matchedPattern || matchedEndOfPath
   }
@@ -57,12 +57,12 @@ function fixSourcePaths(coverage) {
 
     if (inputSourceMap.sourceRoot) inputSourceMap.sourceRoot = ''
     inputSourceMap.sources = inputSourceMap.sources.map((source) =>
-      source.includes(fileName) ? absolutePath : source
+      source.includes(fileName) ? absolutePath : source,
     )
   })
 }
 
 module.exports = {
   fixSourcePaths,
-  filterSpecsFromCoverage
+  filterSpecsFromCoverage,
 }
