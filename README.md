@@ -1,4 +1,4 @@
-# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-9.5.1-brightgreen)
+# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-9.5.1-brightgreen) [![CircleCI](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main.svg?style=svg)](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main)
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
@@ -131,7 +131,7 @@ module.exports = (on, config) => {
   require('@bahmutov/cypress-code-coverage/task')(on, config)
   on(
     'file:preprocessor',
-    require('@bahmutov/cypress-code-coverage/use-babelrc')
+    require('@bahmutov/cypress-code-coverage/use-babelrc'),
   )
   return config
 }
@@ -150,7 +150,7 @@ module.exports = (on, config) => {
   require('@bahmutov/cypress-code-coverage/task')(on, config)
   on(
     'file:preprocessor',
-    require('@bahmutov/cypress-code-coverage/use-browserify-istanbul')
+    require('@bahmutov/cypress-code-coverage/use-browserify-istanbul'),
   )
   return config
 }
