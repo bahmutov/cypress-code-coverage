@@ -26,20 +26,27 @@ const sendCoverage = (coverage, pathname = '/') => {
   // by default we do not filter anything from the code coverage object
   // if the user gives a list of patters to filter, we filter the coverage object
   if (config.exclude) {
-    const filterOut = Cypress._.isString(config.exclude)
-      ? [config.exclude]
-      : config.exclude
+    if (config.exclude === true) {
+      // try excluding spec and support files
+      const withoutSpecs = filterSpecsFromCoverage(coverage)
+      filteredCoverage = filterSupportFilesFromCoverage(withoutSpecs)
+    } else {
+      const filterOut = Cypress._.isString(config.exclude)
+        ? [config.exclude]
+        : config.exclude
 
-    filteredCoverage = Cypress._.omitBy(coverage, (fileCoverage, filename) => {
-      return filterOut.some((pattern) => {
-        if (pattern.includes('*')) {
-          return Cypress.minimatch(filename, pattern)
-        }
-        return filename.endsWith(pattern)
-      })
-    })
-    // const withoutSpecs = filterSpecsFromCoverage(coverage)
-    // filteredCoverage = filterSupportFilesFromCoverage(withoutSpecs)
+      filteredCoverage = Cypress._.omitBy(
+        coverage,
+        (fileCoverage, filename) => {
+          return filterOut.some((pattern) => {
+            if (pattern.includes('*')) {
+              return Cypress.minimatch(filename, pattern)
+            }
+            return filename.endsWith(pattern)
+          })
+        },
+      )
+    }
   }
 
   // stringify coverage object for speed

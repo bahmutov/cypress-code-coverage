@@ -315,6 +315,30 @@ Specify the list of files to exclude from the saved coverage report using `cypre
 }
 ```
 
+By default, no files are filtered out from the code coverage object, which is equivalent to:
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": false
+    }
+  }
+}
+```
+
+You can try excluding the default integration and support files only using
+
+```json
+{
+  "env": {
+    "coverage": {
+      "exclude": true
+    }
+  }
+}
+```
+
 ### Exclude "else" branch
 
 When running code only during Cypress tests, the "else" branch will never be hit. Thus we should exclude it from the branch coverage computation:
