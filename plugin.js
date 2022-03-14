@@ -10,7 +10,7 @@ function registerCodeCoveragePlugin(on, config) {
   let reportAfterEachSpec = true
   if (
     config.env &&
-    config.env.coverage &&
+    typeof config.env.coverage === 'object' &&
     'reportAfterEachSpec' in config.env.coverage
   ) {
     reportAfterEachSpec = Boolean(config.env.coverage.reportAfterEachSpec)
