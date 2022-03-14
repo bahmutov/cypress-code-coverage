@@ -16,11 +16,11 @@ Add to your `cypress/support/index.js` file
 import '@bahmutov/cypress-code-coverage/support'
 ```
 
-Register tasks in your `cypress/plugins/index.js` file
+Register the plugin from your `cypress/plugins/index.js` file
 
 ```js
 module.exports = (on, config) => {
-  require('@bahmutov/cypress-code-coverage/task')(on, config)
+  require('@bahmutov/cypress-code-coverage/plugin')(on, config)
 
   // add other tasks to be registered here
 
@@ -105,6 +105,20 @@ ERROR: Coverage for lines (100%) does not meet global threshold (101%)
 ```
 
 Watch video [How to read code coverage report](https://youtu.be/yVvCYtsmkZU) to see how to read the HTML coverage report.
+
+### Default summary after each spec file
+
+By default, this plugin shows the coverage summary after each spec file. You can disable this summary from the `cypress.json` file
+
+```json
+{
+  "env": {
+    "coverage": {
+      "reportAfterEachSpec": false
+    }
+  }
+}
+```
 
 ## Instrument unit tests
 
