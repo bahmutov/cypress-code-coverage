@@ -1,3 +1,8 @@
 {
-  "fixturesFolder": false
+  "fixturesFolder": false,
+  "env": {
+    "coverage": {
+      "exclude": true
+    }
+  }
 }
