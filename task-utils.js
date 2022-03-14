@@ -221,13 +221,22 @@ function findCommonRoot(filepaths) {
       filepath.slice(prefix.length),
     )
     debug('removedPrefix %o', removedPrefixNames)
-    const foundAllPaths = removedPrefixNames.every((filepath) =>
-      existsSync(join(cwd, filepath)),
-    )
-    debug('all files found at %s? %o', prefix, foundAllPaths)
-    if (foundAllPaths) {
-      debug('found prefix that matches current folder: %s', prefix)
+
+    let foundCount = 0
+    removedPrefixNames.forEach((filepath) => {
+      if (existsSync(join(cwd, filepath))) {
+        foundCount += 1
+      }
+    })
+    const foundMostPaths = foundCount >= removedPrefixNames.length / 2
+    debug('found %d files out of %d', foundCount, removedPrefixNames.length)
+    debug('found most files found at "%s"? %o', prefix, foundMostPaths)
+    if (foundMostPaths) {
       foundCurrentFolder = prefix
+      debug(
+        'found prefix that matches current folder: "%s"',
+        foundCurrentFolder,
+      )
       break
     }
   }
@@ -240,7 +249,7 @@ function tryFindingLocalFiles(nycFilename) {
   const coverageKeys = Object.keys(nycCoverage)
   const filenames = coverageKeys.map((key) => nycCoverage[key].path)
   const commonFolder = findCommonRoot(filenames)
-  if (!commonFolder) {
+  if (commonFolder === undefined) {
     debug('could not find common folder %s', commonFolder)
     return
   }
@@ -250,19 +259,32 @@ function tryFindingLocalFiles(nycFilename) {
     commonFolder,
     cwd,
   )
-  const length = commonFolder.length
   let changed
 
-  coverageKeys.forEach((key) => {
-    const from = nycCoverage[key].path
-    if (from.startsWith(commonFolder)) {
-      const to = join(cwd, from.slice(length))
+  if (commonFolder === '') {
+    // we just need to prefix the paths with the current folder
+    coverageKeys.forEach((key) => {
+      const filePath = nycCoverage[key].path
+      const to = join(cwd, filePath)
       // ? Do we need to replace the "key" in the coverage object or can we just replace the "path"?
       nycCoverage[key].path = to
-      debug('replaced %s -> %s', from, to)
+      debug('formed %s -> %s', filePath, to)
       changed = true
-    }
-  })
+    })
+  } else {
+    // we need to replace part of the paths with the current folder
+    const length = commonFolder.length
+    coverageKeys.forEach((key) => {
+      const from = nycCoverage[key].path
+      if (from.startsWith(commonFolder)) {
+        const to = join(cwd, from.slice(length))
+        // ? Do we need to replace the "key" in the coverage object or can we just replace the "path"?
+        nycCoverage[key].path = to
+        debug('replaced %s -> %s', from, to)
+        changed = true
+      }
+    })
+  }
 
   if (changed) {
     debug('tryFindingLocalFiles saving updated file %s', nycFilename)
