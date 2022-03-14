@@ -19,7 +19,7 @@ const sendCoverage = (coverage, pathname = '/') => {
 
   // stringify coverage object for speed
   cy.task('combineCoverage', JSON.stringify(appCoverageOnly), {
-    log: false
+    log: false,
   })
 }
 
@@ -47,7 +47,7 @@ const filterSupportFilesFromCoverage = (totalCoverage) => {
   const isSupportFile = (filename) => filename === supportFile
 
   let coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
-    isSupportFile(filename)
+    isSupportFile(filename),
   )
 
   // check the edge case
@@ -57,7 +57,7 @@ const filterSupportFilesFromCoverage = (totalCoverage) => {
   if (!integrationFolder.startsWith(supportFolder)) {
     // remove all covered files from support folder
     coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
-      filename.startsWith(supportFolder)
+      filename.startsWith(supportFolder),
     )
   }
   return coverage
@@ -77,16 +77,16 @@ const registerHooks = () => {
     // keep increasing every time we rerun the tests
     const logInstance = Cypress.log({
       name: 'Coverage',
-      message: ['Reset [@cypress/code-coverage]']
+      message: ['Reset [@cypress/code-coverage]'],
     })
 
     cy.task(
       'resetCoverage',
       {
         // @ts-ignore
-        isInteractive: Cypress.config('isInteractive')
+        isInteractive: Cypress.config('isInteractive'),
       },
-      { log: false }
+      { log: false },
     ).then(() => {
       logInstance.end()
     })
@@ -106,7 +106,7 @@ const registerHooks = () => {
 
       if (
         Cypress._.find(windowCoverageObjects, {
-          coverage: applicationSourceCoverage
+          coverage: applicationSourceCoverage,
         })
       ) {
         // this application code coverage object is already known
@@ -116,7 +116,7 @@ const registerHooks = () => {
 
       windowCoverageObjects.push({
         coverage: applicationSourceCoverage,
-        pathname: win.location.pathname
+        pathname: win.location.pathname,
       })
     }
 
@@ -141,7 +141,7 @@ const registerHooks = () => {
         const expectBackendCoverageOnly = Cypress._.get(
           Cypress.env('codeCoverage'),
           'expectBackendCoverageOnly',
-          false
+          false,
         )
         if (!expectBackendCoverageOnly) {
           logMessage(`
@@ -176,12 +176,12 @@ const registerHooks = () => {
       const url = Cypress._.get(
         Cypress.env('codeCoverage'),
         'url',
-        '/__coverage__'
+        '/__coverage__',
       )
       cy.request({
         url,
         log: false,
-        failOnStatusCode: false
+        failOnStatusCode: false,
       })
         .then((r) => {
           return Cypress._.get(r, 'body.coverage', null)
@@ -193,11 +193,11 @@ const registerHooks = () => {
             const expectBackendCoverageOnly = Cypress._.get(
               Cypress.env('codeCoverage'),
               'expectBackendCoverageOnly',
-              false
+              false,
             )
             if (expectBackendCoverageOnly) {
               throw new Error(
-                `Expected to collect backend code coverage from ${url}`
+                `Expected to collect backend code coverage from ${url}`,
               )
             } else {
               // we did not really expect to collect the backend code coverage
@@ -227,14 +227,14 @@ const registerHooks = () => {
     // when all tests finish, lets generate the coverage report
     const logInstance = Cypress.log({
       name: 'Coverage',
-      message: ['Generating report [@cypress/code-coverage]']
+      message: ['Generating report [@cypress/code-coverage]'],
     })
     cy.task('coverageReport', null, {
       timeout: dayjs.duration(3, 'minutes').asMilliseconds(),
-      log: false
+      log: false,
     }).then((coverageReportFolder) => {
       logInstance.set('consoleProps', () => ({
-        'coverage report folder': coverageReportFolder
+        'coverage report folder': coverageReportFolder,
       }))
       logInstance.end()
       return coverageReportFolder
@@ -251,7 +251,7 @@ const registerHooks = () => {
 
 // to avoid "coverage" env variable being case-sensitive, convert to lowercase
 const cyEnvs = Cypress._.mapKeys(Cypress.env(), (value, key) =>
-  key.toLowerCase()
+  key.toLowerCase(),
 )
 
 if (cyEnvs.coverage === false) {

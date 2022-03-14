@@ -9,7 +9,7 @@ const {
   checkAllPathsNotFound,
   tryFindingLocalFiles,
   readNycOptions,
-  includeAllFiles
+  includeAllFiles,
 } = require('./task-utils')
 const { fixSourcePaths } = require('./support-utils')
 const { removePlaceholders } = require('./common-utils')
@@ -81,7 +81,7 @@ function maybePrintFinalCoverageFiles(folder) {
   debug(
     'There are %d key(s) in %s',
     finalCoverageKeys.length,
-    jsonReportFilename
+    jsonReportFilename,
   )
 
   finalCoverageKeys.forEach((key) => {
@@ -104,7 +104,7 @@ function maybePrintFinalCoverageFiles(folder) {
       coverageStatus,
       key,
       coveredStatements,
-      totalStatements
+      totalStatements,
     )
   })
 }
@@ -191,11 +191,11 @@ const tasks = {
       debug(
         'saving coverage report using script "%s" from package.json, command: %s',
         DEFAULT_CUSTOM_COVERAGE_SCRIPT_NAME,
-        customNycReportScript
+        customNycReportScript,
       )
       debug('current working directory is %s', process.cwd())
       return execa('npm', ['run', DEFAULT_CUSTOM_COVERAGE_SCRIPT_NAME], {
-        stdio: 'inherit'
+        stdio: 'inherit',
       })
     }
 
@@ -213,7 +213,7 @@ const tasks = {
       const reportFolder = nycReportOptions['report-dir']
       debug(
         'after reporting, returning the report folder name %s',
-        reportFolder
+        reportFolder,
       )
 
       maybePrintFinalCoverageFiles(reportFolder)
@@ -221,7 +221,7 @@ const tasks = {
       return reportFolder
     }
     return nyc.report().then(returnReportFolder)
-  }
+  },
 }
 
 /**

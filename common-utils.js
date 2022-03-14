@@ -23,7 +23,7 @@ const defaultNycOptions = {
   'report-dir': './coverage',
   reporter: ['lcov', 'clover', 'json', 'json-summary'],
   extension: ['.js', '.cjs', '.mjs', '.ts', '.tsx', '.jsx'],
-  excludeAfterRemap: false
+  excludeAfterRemap: false,
 }
 
 /**
@@ -40,7 +40,7 @@ const fileCoveragePlaceholder = (fullPath) => {
     branchMap: {},
     s: {},
     f: {},
-    b: {}
+    b: {},
   }
 }
 
@@ -65,5 +65,5 @@ module.exports = {
   combineNycOptions,
   defaultNycOptions,
   fileCoveragePlaceholder,
-  removePlaceholders
+  removePlaceholders,
 }
