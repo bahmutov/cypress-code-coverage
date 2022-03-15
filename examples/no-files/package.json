@@ -1,0 +1,16 @@
+{
+  "name": "example-filter-files",
+  "description": "Filtering out files from the code coverage",
+  "devDependencies": {
+    "@babel/core": "7.9.0"
+  },
+  "scripts": {
+    "start": "../../node_modules/.bin/parcel serve index.html",
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "dev": "../../node_modules/.bin/start-test 1234 cy:open",
+    "clean": "rm -rf .nyc_output coverage",
+    "e2e": "../../node_modules/.bin/start-test 1234 cy:run",
+    "pree2e": "npm run clean"
+  }
+}

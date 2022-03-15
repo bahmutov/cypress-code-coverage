@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 // @ts-check
 // helper functions that are safe to use in the browser
 // from support.js file - no file system access
