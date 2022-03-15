@@ -1,8 +1,13 @@
+const { getNycReportFilename } = require('./task-utils')
+const { existsSync } = require('fs')
 const NYC = require('nyc')
+
 const nyc = new NYC({
   cwd: process.cwd(),
   reporter: 'text',
 })
+
+const nycFilename = getNycReportFilename(process.cwd())
 
 function registerCodeCoveragePlugin(on, config) {
   require('./task')(on, config)
@@ -18,8 +23,12 @@ function registerCodeCoveragePlugin(on, config) {
 
   if (reportAfterEachSpec) {
     on('after:spec', (t) => {
-      console.log('after spec %s', t.relative)
-      return nyc.report()
+      console.log('code coverage after spec %s', t.relative)
+      if (existsSync(nycFilename)) {
+        return nyc.report()
+      } else {
+        console.warn('Could not find coverage file %s', nycFilename)
+      }
     })
   }
 

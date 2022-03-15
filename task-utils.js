@@ -106,6 +106,13 @@ function getNycOptions(workingDirectory) {
   return nycReportOptions
 }
 
+function getNycReportFilename(workingDirectory) {
+  const nycReportOptions = getNycOptions(workingDirectory)
+
+  const nycFilename = join(nycReportOptions['temp-dir'], 'out.json')
+  return nycFilename
+}
+
 function checkAllPathsNotFound(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
 
@@ -442,5 +449,6 @@ module.exports = {
   tryFindingLocalFiles,
   readNycOptions,
   getNycOptions,
+  getNycReportFilename,
   includeAllFiles,
 }
