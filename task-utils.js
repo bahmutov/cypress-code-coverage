@@ -76,6 +76,43 @@ function readNycOptions(workingDirectory) {
   return nycOptions
 }
 
+function getNycOptions(workingDirectory) {
+  if (!workingDirectory) {
+    workingDirectory = process.cwd()
+  }
+
+  // https://github.com/istanbuljs/nyc#common-configuration-options
+  const nycReportOptions = readNycOptions(workingDirectory)
+
+  if (nycReportOptions.exclude && !Array.isArray(nycReportOptions.exclude)) {
+    console.error('NYC options: %o', nycReportOptions)
+    throw new Error('Expected "exclude" to by an array')
+  }
+
+  if (nycReportOptions['temp-dir']) {
+    nycReportOptions['temp-dir'] = resolve(nycReportOptions['temp-dir'])
+  } else {
+    nycReportOptions['temp-dir'] = join(workingDirectory, '.nyc_output')
+  }
+
+  nycReportOptions.tempDir = nycReportOptions['temp-dir']
+
+  if (nycReportOptions['report-dir']) {
+    nycReportOptions['report-dir'] = resolve(nycReportOptions['report-dir'])
+  }
+  // seems nyc API really is using camel cased version
+  nycReportOptions.reportDir = nycReportOptions['report-dir']
+
+  return nycReportOptions
+}
+
+function getNycReportFilename(workingDirectory) {
+  const nycReportOptions = getNycOptions(workingDirectory)
+
+  const nycFilename = join(nycReportOptions['temp-dir'], 'out.json')
+  return nycFilename
+}
+
 function checkAllPathsNotFound(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
 
@@ -411,5 +448,7 @@ module.exports = {
   checkAllPathsNotFound,
   tryFindingLocalFiles,
   readNycOptions,
+  getNycOptions,
+  getNycReportFilename,
   includeAllFiles,
 }

@@ -1,6 +1,6 @@
 // @ts-check
 const istanbul = require('istanbul-lib-coverage')
-const { join, resolve } = require('path')
+const { join } = require('path')
 const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
 const execa = require('execa')
 const {
@@ -8,7 +8,7 @@ const {
   resolveRelativePaths,
   checkAllPathsNotFound,
   tryFindingLocalFiles,
-  readNycOptions,
+  getNycOptions,
   includeAllFiles,
 } = require('./task-utils')
 const { fixSourcePaths } = require('./support-utils')
@@ -31,31 +31,7 @@ const scripts = pkg.scripts || {}
 const DEFAULT_CUSTOM_COVERAGE_SCRIPT_NAME = 'coverage:report'
 const customNycReportScript = scripts[DEFAULT_CUSTOM_COVERAGE_SCRIPT_NAME]
 
-const nycReportOptions = (function getNycOption() {
-  // https://github.com/istanbuljs/nyc#common-configuration-options
-  const nycReportOptions = readNycOptions(processWorkingDirectory)
-
-  if (nycReportOptions.exclude && !Array.isArray(nycReportOptions.exclude)) {
-    console.error('NYC options: %o', nycReportOptions)
-    throw new Error('Expected "exclude" to by an array')
-  }
-
-  if (nycReportOptions['temp-dir']) {
-    nycReportOptions['temp-dir'] = resolve(nycReportOptions['temp-dir'])
-  } else {
-    nycReportOptions['temp-dir'] = join(processWorkingDirectory, '.nyc_output')
-  }
-
-  nycReportOptions.tempDir = nycReportOptions['temp-dir']
-
-  if (nycReportOptions['report-dir']) {
-    nycReportOptions['report-dir'] = resolve(nycReportOptions['report-dir'])
-  }
-  // seems nyc API really is using camel cased version
-  nycReportOptions.reportDir = nycReportOptions['report-dir']
-
-  return nycReportOptions
-})()
+const nycReportOptions = getNycOptions(processWorkingDirectory)
 
 const nycFilename = join(nycReportOptions['temp-dir'], 'out.json')
 

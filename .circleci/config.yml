@@ -264,6 +264,19 @@ workflows:
                   ../../node_modules/.bin/only-covered first.js second.js third.js
                 working_directory: examples/multiple-files
 
+      - cypress/run:
+          attach-workspace: true
+          name: example-no-files
+          requires:
+            - cypress/install
+          # there are no jobs to follow this one
+          # so no need to save the workspace files (saves time)
+          no-workspace: true
+          working_directory: examples/no-files
+          start: npm start
+          wait-on: 'http://localhost:1234'
+          command: '../../node_modules/.bin/cypress run'
+
       # - cypress/run:
       #     attach-workspace: true
       #     name: example-use-webpack
