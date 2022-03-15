@@ -2,26 +2,37 @@ const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
 const NYC = require('nyc')
 
-const nyc = new NYC({
-  cwd: process.cwd(),
-  reporter: 'text',
-})
-
 const nycFilename = getNycReportFilename(process.cwd())
 
 function registerCodeCoveragePlugin(on, config) {
   require('./task')(on, config)
 
-  let reportAfterEachSpec = true
+  // the user can report the code coverage after each spec
+  // reportAfterEachSpec: false = disabled reporting
+  // reportAfterEachSpec: true = enabled reporting, default reporter
+  // reportAfterEachSpec: 'text' = enabled "text" code coverage reporter
+  // typical values: 'text-summary', 'text'
+  let reportAfterEachSpec = 'text-summary'
   if (
     config.env &&
     typeof config.env.coverage === 'object' &&
     'reportAfterEachSpec' in config.env.coverage
   ) {
-    reportAfterEachSpec = Boolean(config.env.coverage.reportAfterEachSpec)
+    if (config.env.coverage.reportAfterEachSpec === false) {
+      reportAfterEachSpec = false
+    } else if (config.env.coverage.reportAfterEachSpec === true) {
+      // use the default code coverage reporter
+    } else {
+      reportAfterEachSpec = config.env.coverage.reportAfterEachSpec
+      debug('')
+    }
   }
 
   if (reportAfterEachSpec) {
+    const nyc = new NYC({
+      cwd: process.cwd(),
+      reporter: reportAfterEachSpec,
+    })
     on('after:spec', (t) => {
       console.log('code coverage after spec %s', t.relative)
       if (existsSync(nycFilename)) {
