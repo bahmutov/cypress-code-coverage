@@ -120,6 +120,20 @@ By default, this plugin shows the coverage summary after each spec file. You can
 }
 ```
 
+You can also specify the reporter to use after each spec:
+
+```json
+{
+  "env": {
+    "coverage": {
+      "reportAfterEachSpec": "text"
+    }
+  }
+}
+```
+
+The default reporter is "text-summary"
+
 ## Instrument unit tests
 
 If you test your application code directly from `specs` you might want to instrument them and combine unit test code coverage with any end-to-end code coverage (from iframe). You can easily instrument spec files using [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) for example.
