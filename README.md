@@ -18,7 +18,27 @@ import '@bahmutov/cypress-code-coverage/support'
 
 Register the plugin from your `cypress/plugins/index.js` file
 
+### Cypress v10+
+
 ```js
+// cypress.config.js
+module.exports = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      require('@bahmutov/cypress-code-coverage/plugin')(on, config)
+
+      // IMPORTANT to return the config object
+      // with the any changed environment variables
+      return config
+    },
+  },
+})
+```
+
+### Cypress v9
+
+```js
+// cypress/plugins/index.js
 module.exports = (on, config) => {
   require('@bahmutov/cypress-code-coverage/plugin')(on, config)
 
