@@ -1,6 +1,8 @@
+// @ts-check
 const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
 const NYC = require('nyc')
+const debug = require('debug')('code-coverage')
 
 const nycFilename = getNycReportFilename(process.cwd())
 
@@ -13,13 +15,14 @@ function registerCodeCoveragePlugin(on, config) {
   // reportAfterEachSpec: 'text' = enabled "text" code coverage reporter
   // typical values: 'text-summary', 'text'
   let reportAfterEachSpec = 'text-summary'
+  let shouldReport = true
   if (
     config.env &&
     typeof config.env.coverage === 'object' &&
     'reportAfterEachSpec' in config.env.coverage
   ) {
     if (config.env.coverage.reportAfterEachSpec === false) {
-      reportAfterEachSpec = false
+      shouldReport = false
     } else if (config.env.coverage.reportAfterEachSpec === true) {
       // use the default code coverage reporter
     } else {
@@ -28,7 +31,7 @@ function registerCodeCoveragePlugin(on, config) {
     }
   }
 
-  if (reportAfterEachSpec) {
+  if (shouldReport) {
     const nyc = new NYC({
       cwd: process.cwd(),
       reporter: reportAfterEachSpec,
