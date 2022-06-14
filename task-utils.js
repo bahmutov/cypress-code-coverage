@@ -442,6 +442,23 @@ function includeAllFiles(nycFilename, nycOptions) {
   }
 }
 
+function getCoverage() {
+  const jsonFilename = join('.', '.nyc_output', 'out.json')
+  const json = JSON.parse(readFileSync(jsonFilename, 'utf8'))
+  return json
+}
+
+function updateSpecCovers(specName, specCovers) {
+  const jsonFilename = join('.', '.nyc_output', 'spec-covers.json')
+  const json = existsSync(jsonFilename)
+    ? JSON.parse(readFileSync(jsonFilename, 'utf8'))
+    : {}
+  json[specName] = specCovers
+  const text = JSON.stringify(json, null, 2) + '\n'
+  writeFileSync(jsonFilename, text, 'utf8')
+  return json
+}
+
 module.exports = {
   showNycInfo,
   resolveRelativePaths,
@@ -451,4 +468,6 @@ module.exports = {
   getNycOptions,
   getNycReportFilename,
   includeAllFiles,
+  getCoverage,
+  updateSpecCovers,
 }

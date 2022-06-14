@@ -117,6 +117,7 @@ const registerHooks = () => {
       {
         // @ts-ignore
         isInteractive: Cypress.config('isInteractive'),
+        specCovers: Cypress.env('specCovers'),
       },
       { log: false },
     ).then(() => {
@@ -164,6 +165,11 @@ const registerHooks = () => {
     // because now the window coverage objects have been updated
     windowCoverageObjects.forEach((cover) => {
       sendCoverage(cover.coverage, cover.pathname)
+    })
+
+    cy.task('reportSpecCovers', {
+      specCovers: Cypress.env('specCovers'),
+      spec: Cypress.spec,
     })
 
     if (!hasE2ECoverage()) {
@@ -261,7 +267,11 @@ const registerHooks = () => {
       name: 'Coverage',
       message: ['Generating report [@cypress/code-coverage]'],
     })
-    cy.task('coverageReport', null, {
+
+    const options = {
+      specCovers: Cypress.env('specCovers'),
+    }
+    cy.task('coverageReport', options, {
       timeout: dayjs.duration(3, 'minutes').asMilliseconds(),
       log: false,
     }).then((coverageReportFolder) => {

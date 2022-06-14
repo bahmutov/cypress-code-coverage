@@ -1,4 +1,5 @@
 // @ts-check
+require('console.table')
 const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
 const NYC = require('nyc')

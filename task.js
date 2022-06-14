@@ -1,6 +1,7 @@
 // @ts-check
 const istanbul = require('istanbul-lib-coverage')
-const { join } = require('path')
+const sortArray = require('sort-array')
+const { join, relative } = require('path')
 const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
 const execa = require('execa')
 const {
@@ -10,6 +11,8 @@ const {
   tryFindingLocalFiles,
   getNycOptions,
   includeAllFiles,
+  getCoverage,
+  updateSpecCovers,
 } = require('./task-utils')
 const { fixSourcePaths } = require('./support-utils')
 const { removePlaceholders } = require('./common-utils')
@@ -95,12 +98,18 @@ const tasks = {
    *    - runs EACH spec separately, so we cannot reset the coverage
    *      or we will lose the coverage from previous specs.
    */
-  resetCoverage({ isInteractive }) {
-    if (isInteractive) {
+  resetCoverage(options = {}) {
+    const { isInteractive, specCovers } = options
+    debug('reset coverage %o', options)
+
+    if (isInteractive || specCovers) {
       debug('reset code coverage in interactive mode')
       const coverageMap = istanbul.createCoverageMap({})
       saveCoverage(coverageMap)
+    } else {
+      debug('not resetting code coverage')
     }
+
     /*
         Else:
           in headless mode, assume the coverage file was deleted
@@ -143,11 +152,66 @@ const tasks = {
     return null
   },
 
+  reportSpecCovers(options) {
+    debug('report spec covers %o', options)
+    const { specCovers, spec } = options
+    if (!specCovers) {
+      return null
+    }
+
+    const specNumbers = []
+    const coverage = getCoverage()
+    const coverageKeys = Object.keys(coverage)
+    const cwd = process.cwd()
+    coverageKeys.forEach((key) => {
+      const fileCoverage = coverage[key]
+      const sourceRelative = relative(cwd, fileCoverage.path)
+      const s = fileCoverage.s || {}
+      const statements = Object.keys(s)
+      const totalStatements = statements.length
+      let coveragePercentage = 0
+      if (totalStatements > 0) {
+        let covered = 0
+        statements.forEach((k) => {
+          const count = s[k]
+          if (count > 0) {
+            covered += 1
+          }
+        })
+        coveragePercentage = Math.round((covered / totalStatements) * 100)
+      }
+      specNumbers.push({
+        name: sourceRelative,
+        covered: coveragePercentage,
+      })
+      // console.log('%s - %d', sourceRelative, )
+    })
+
+    const sorted = sortArray(specNumbers, {
+      by: ['covered'],
+      order: ['desc'],
+    })
+
+    console.table(`spec ${spec.relative} covers`, sorted)
+    // console.log('spec %s covers:', spec.relative)
+
+    updateSpecCovers(spec.relative, sorted)
+
+    return null
+  },
+
   /**
    * Saves coverage information as a JSON file and calls
    * NPM script to generate HTML report
    */
-  coverageReport() {
+  coverageReport(options = {}) {
+    debug('coverage report %o', options)
+    const { specCovers } = options
+    if (specCovers) {
+      debug('when using spec covers, skipping final report')
+      return null
+    }
+
     if (!existsSync(nycFilename)) {
       console.warn('Cannot find coverage file %s', nycFilename)
       console.warn('Skipping coverage report')
@@ -216,6 +280,7 @@ const tasks = {
   ```
 */
 function registerCodeCoverageTasks(on, config) {
+  debug('registering code coverage tasks')
   on('task', tasks)
 
   // set a variable to let the hooks running in the browser
