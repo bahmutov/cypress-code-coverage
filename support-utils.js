@@ -53,6 +53,7 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
 function fixSourcePaths(coverage) {
   Object.values(coverage).forEach((file) => {
     const { path: absolutePath, inputSourceMap } = file
+    // @ts-ignore
     const fileName = /([^\/\\]+)$/.exec(absolutePath)[1]
     if (!inputSourceMap || !fileName) return
 
