@@ -1,5 +1,6 @@
 // @ts-check
 const istanbul = require('istanbul-lib-coverage')
+const sortArray = require('sort-array')
 const { join, relative } = require('path')
 const { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
 const execa = require('execa')
@@ -100,7 +101,7 @@ const tasks = {
     const { isInteractive, specCovers } = options
     debug('reset coverage %o', options)
 
-    if (isInteractive) {
+    if (isInteractive || specCovers) {
       debug('reset code coverage in interactive mode')
       const coverageMap = istanbul.createCoverageMap({})
       saveCoverage(coverageMap)
@@ -185,7 +186,12 @@ const tasks = {
       // console.log('%s - %d', sourceRelative, )
     })
 
-    console.table(`spec ${spec.relative} covers`, specNumbers)
+    const sorted = sortArray(specNumbers, {
+      by: ['covered'],
+      order: ['desc'],
+    })
+
+    console.table(`spec ${spec.relative} covers`, sorted)
     // console.log('spec %s covers:', spec.relative)
 
     return null
@@ -195,7 +201,14 @@ const tasks = {
    * Saves coverage information as a JSON file and calls
    * NPM script to generate HTML report
    */
-  coverageReport() {
+  coverageReport(options = {}) {
+    debug('coverage report %o', options)
+    const { specCovers } = options
+    if (specCovers) {
+      debug('when using spec covers, skipping final report')
+      return null
+    }
+
     if (!existsSync(nycFilename)) {
       console.warn('Cannot find coverage file %s', nycFilename)
       console.warn('Skipping coverage report')

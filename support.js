@@ -268,7 +268,10 @@ const registerHooks = () => {
       message: ['Generating report [@cypress/code-coverage]'],
     })
 
-    cy.task('coverageReport', null, {
+    const options = {
+      specCovers: Cypress.env('specCovers'),
+    }
+    cy.task('coverageReport', options, {
       timeout: dayjs.duration(3, 'minutes').asMilliseconds(),
       log: false,
     }).then((coverageReportFolder) => {
