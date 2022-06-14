@@ -12,6 +12,7 @@ const {
   getNycOptions,
   includeAllFiles,
   getCoverage,
+  updateSpecCovers,
 } = require('./task-utils')
 const { fixSourcePaths } = require('./support-utils')
 const { removePlaceholders } = require('./common-utils')
@@ -193,6 +194,8 @@ const tasks = {
 
     console.table(`spec ${spec.relative} covers`, sorted)
     // console.log('spec %s covers:', spec.relative)
+
+    updateSpecCovers(spec.relative, sorted)
 
     return null
   },
