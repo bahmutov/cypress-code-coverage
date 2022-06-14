@@ -188,7 +188,7 @@ const tasks = {
     })
 
     const sorted = sortArray(specNumbers, {
-      by: ['covered'],
+      by: ['covered', 'name'],
       order: ['desc'],
     })
 
