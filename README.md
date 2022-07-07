@@ -13,6 +13,7 @@ Note: this plugin assumes `cypress` is a peer dependency already installed in yo
 Add to your `cypress/support/index.js` file
 
 ```js
+// https://github.com/bahmutov/cypress-code-coverage
 import '@bahmutov/cypress-code-coverage/support'
 ```
 
@@ -25,6 +26,7 @@ Register the plugin from your `cypress/plugins/index.js` file
 module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
+      // https://github.com/bahmutov/cypress-code-coverage
       require('@bahmutov/cypress-code-coverage/plugin')(on, config)
 
       // IMPORTANT to return the config object
@@ -40,6 +42,7 @@ module.exports = defineConfig({
 ```js
 // cypress/plugins/index.js
 module.exports = (on, config) => {
+  // https://github.com/bahmutov/cypress-code-coverage
   require('@bahmutov/cypress-code-coverage/plugin')(on, config)
 
   // add other tasks to be registered here
