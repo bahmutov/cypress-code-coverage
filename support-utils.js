@@ -8,19 +8,16 @@
  * only keep "external" application source file coverage
  */
 const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
-  /** @type {string} Cypress run-time config has test files string pattern */
-  // @ts-ignore
-  const testFilePattern = config('testFiles')
+  /** @type {string|string[]} Cypress run-time config has test files string pattern */
+  const specPattern = config('specPattern')
 
-  // test files chould be:
+  // test files could be:
   //  wild card string "**/*.*" (default)
   //  wild card string "**/*spec.js"
   //  list of wild card strings or names ["**/*spec.js", "spec-one.js"]
-  const testFilePatterns = Array.isArray(testFilePattern)
-    ? testFilePattern
-    : [testFilePattern]
-
-  const isUsingDefaultTestPattern = testFilePattern === '**/*.*'
+  const testFilePatterns = Array.isArray(specPattern)
+    ? specPattern
+    : [specPattern]
 
   const isTestFile = (filename) => {
     const matchedPattern = testFilePatterns.some((specPattern) =>
