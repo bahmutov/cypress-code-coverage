@@ -10,6 +10,7 @@
 const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   /** @type {string|string[]} Cypress run-time config has test files string pattern */
   const specPattern = config('specPattern')
+  const configFilename = config('configFile')
 
   // test files could be:
   //  wild card string "**/*.*" (default)
@@ -26,7 +27,9 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
     const matchedEndOfPath = testFilePatterns.some((specPattern) =>
       filename.endsWith(specPattern),
     )
-    return matchedPattern || matchedEndOfPath
+    const matchedConfig = configFilename.endsWith(filename)
+
+    return matchedPattern || matchedEndOfPath || matchedConfig
   }
 
   const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>

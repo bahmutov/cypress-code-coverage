@@ -20,9 +20,28 @@ describe('minimatch', () => {
 })
 
 describe('filtering specs', () => {
+  it('filters out the config filename', () => {
+    const config = cy.stub()
+    config.withArgs('specPattern').returns([])
+    config.withArgs('configFile').returns('/root/path/cypress.config.js')
+
+    const totalCoverage = {
+      '/path/to/specA.js': {},
+      '/path/to/specB.js': {},
+      // the config file should be filtered out
+      'cypress.config.js': {},
+    }
+    const result = filterSpecsFromCoverage(totalCoverage, config)
+    expect(result).to.deep.equal({
+      '/path/to/specA.js': {},
+      '/path/to/specB.js': {},
+    })
+  })
+
   it('filters list of specs by single string', () => {
     const config = cy.stub()
     config.withArgs('specPattern').returns(['specA.js'])
+    config.withArgs('configFile').returns('/root/path/cypress.config.js')
 
     const totalCoverage = {
       '/path/to/specA.js': {},
@@ -37,6 +56,7 @@ describe('filtering specs', () => {
   it('filters list of specs by pattern', () => {
     const config = cy.stub()
     config.withArgs('specPattern').returns(['**/*B.js'])
+    config.withArgs('configFile').returns('/root/path/cypress.config.js')
 
     const totalCoverage = {
       '/path/to/specA.js': {},
@@ -51,6 +71,7 @@ describe('filtering specs', () => {
   it('filters list of specs by pattern and single spec', () => {
     const config = cy.stub()
     config.withArgs('specPattern').returns(['**/*B.js', 'specA.js'])
+    config.withArgs('configFile').returns('/root/path/cypress.config.js')
 
     const totalCoverage = {
       '/path/to/specA.js': {},
@@ -63,6 +84,7 @@ describe('filtering specs', () => {
   it('filters list of specs in integration folder', () => {
     const config = cy.stub()
     config.withArgs('specPattern').returns('**/*.cy.*')
+    config.withArgs('configFile').returns('/root/path/cypress.config.js')
 
     const totalCoverage = {
       '/path/to/specA.js': {},
