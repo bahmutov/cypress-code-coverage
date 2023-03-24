@@ -8,7 +8,6 @@
  * only keep "external" application source file coverage
  */
 const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
-  const integrationFolder = config('integrationFolder')
   /** @type {string} Cypress run-time config has test files string pattern */
   // @ts-ignore
   const testFilePattern = config('testFiles')
@@ -33,15 +32,9 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
     return matchedPattern || matchedEndOfPath
   }
 
-  const isInIntegrationFolder = (filename) =>
-    filename.startsWith(integrationFolder)
-
-  const isA = (fileCoverge, filename) => isInIntegrationFolder(filename)
-  const isB = (fileCoverge, filename) => isTestFile(filename)
-
-  const isTestFileFilter = isUsingDefaultTestPattern ? isA : isB
-
-  const coverage = Cypress._.omitBy(totalCoverage, isTestFileFilter)
+  const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
+    isTestFile(filename),
+  )
   return coverage
 }
 
