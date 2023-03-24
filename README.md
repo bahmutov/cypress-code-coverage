@@ -2,6 +2,8 @@
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
+🎓 Covered in my course [Testing The Swag Store](https://cypress.tips/courses/swag-store)
+
 ## Install
 
 ```shell
