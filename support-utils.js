@@ -36,7 +36,7 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
     isTestFile(filename),
   )
-  // console.log(Object.keys(coverage))
+  console.log(Object.keys(coverage))
 
   return coverage
 }
