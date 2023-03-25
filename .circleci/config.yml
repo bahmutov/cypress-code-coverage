@@ -488,9 +488,7 @@ workflows:
                 working_directory: examples/use-plugins-and-support
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/only-covered main.js
+                command: npm run check
                 working_directory: examples/use-plugins-and-support
 
       - cypress/run:
