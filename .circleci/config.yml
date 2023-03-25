@@ -546,9 +546,7 @@ workflows:
                 working_directory: examples/unit-tests-js
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage misc.js
-                  ../../node_modules/.bin/only-covered misc.js
+                command: npm run check
                 working_directory: examples/unit-tests-js
 
       - cypress/run:
