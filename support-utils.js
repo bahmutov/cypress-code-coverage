@@ -36,7 +36,7 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
     isTestFile(filename),
   )
-  console.log(Object.keys(coverage))
+  // console.log(Object.keys(coverage))
 
   return coverage
 }
@@ -60,7 +60,68 @@ function fixSourcePaths(coverage) {
   })
 }
 
+/**
+ * by default we do not filter anything from the code coverage object
+ * if the user gives a list of patters to filter, we filter the coverage object.
+ * @param {boolean|string|string[]} exclude What to exclude (default files or specific list)
+ * @param {object} coverage Each key is an absolute filepath
+ */
+function excludeByUser(exclude, coverage) {
+  if (!exclude) {
+    return coverage
+  }
+
+  console.log('excludeByUser config exclude', exclude)
+  console.log(coverage)
+
+  if (exclude === true) {
+    // try excluding spec and support files
+    const withoutSpecs = filterSpecsFromCoverage(coverage)
+    const filteredCoverage = filterSupportFilesFromCoverage(withoutSpecs)
+    console.log('exclude true filtered', Object.keys(filteredCoverage))
+    return filteredCoverage
+  }
+
+  const filterOut = Cypress._.isString(exclude) ? [exclude] : exclude
+  // console.log({ filterOut })
+
+  const filteredCoverage = Cypress._.omitBy(
+    coverage,
+    (fileCoverage, filename) => {
+      return filterOut.some((pattern) => {
+        if (pattern.includes('*')) {
+          return Cypress.minimatch(filename, pattern)
+        }
+        return filename.endsWith(pattern)
+      })
+    },
+  )
+  console.log('exclude masks filtered', Object.keys(filteredCoverage))
+  return filteredCoverage
+}
+
+/**
+ * Removes support file from the coverage object.
+ * If there are more files loaded from support folder, also removes them
+ */
+const filterSupportFilesFromCoverage = (totalCoverage) => {
+  const supportFile = Cypress.config('supportFile')
+
+  /** @type {string} Cypress run-time config has the support folder string */
+  // @ts-ignore
+  const supportFolder = Cypress.config('supportFolder')
+
+  const isSupportFile = (filename) => filename === supportFile
+
+  const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
+    isSupportFile(filename),
+  )
+
+  return coverage
+}
+
 module.exports = {
   fixSourcePaths,
   filterSpecsFromCoverage,
+  excludeByUser,
 }
