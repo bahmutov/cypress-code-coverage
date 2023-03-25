@@ -2,6 +2,10 @@
   "name": "example-one-spec",
   "description": "Only running a single spec",
   "scripts": {
-    "cy:open": "../../node_modules/.bin/cypress open"
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "check:covered": "../../node_modules/.bin/check-coverage main.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js",
+    "check": "npm run check:covered && npm run check:extras"
   }
 }
