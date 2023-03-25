@@ -19,7 +19,7 @@
     "types": "tsc --noEmit --allowJs *.js cypress/e2e/*.js"
   },
   "peerDependencies": {
-    "cypress": "*"
+    "cypress": ">=10.0.0"
   },
   "repository": {
     "type": "git",
