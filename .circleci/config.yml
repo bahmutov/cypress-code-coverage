@@ -257,11 +257,7 @@ workflows:
                 path: examples/multiple-files/coverage
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage first.js
-                  ../../node_modules/.bin/check-coverage second.js
-                  ../../node_modules/.bin/check-coverage third.js
-                  ../../node_modules/.bin/only-covered first.js second.js third.js
+                command: npm run check
                 working_directory: examples/multiple-files
 
       - cypress/run:
