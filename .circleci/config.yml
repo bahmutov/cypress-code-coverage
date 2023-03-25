@@ -335,10 +335,7 @@ workflows:
                 working_directory: examples/same-folder
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/check-coverage unit-utils.js
-                  ../../node_modules/.bin/only-covered main.js unit-utils.js
+                command: npm run check
                 working_directory: examples/same-folder
 
       - cypress/run:
