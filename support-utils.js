@@ -19,6 +19,9 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   //  wild card string "**/*spec.js"
   //  list of wild card strings or names ["**/*spec.js", "spec-one.js"]
   const rootFolder = config('projectRoot')
+  if (typeof rootFolder === 'undefined') {
+    throw new Error('Cypress projectRoot folder cannot be undefined')
+  }
   const testFilePatterns = (
     Array.isArray(specPattern) ? specPattern : [specPattern]
   ).map((pattern) => {
