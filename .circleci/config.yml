@@ -119,11 +119,7 @@ workflows:
                 working_directory: examples/fullstack
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage fullstack/server/server.js
-                  ../../node_modules/.bin/check-coverage fullstack/main.js
-                  ../../node_modules/.bin/check-coverage fullstack/string-utils.js
-                  ../../node_modules/.bin/only-covered server.js main.js string-utils.js
+                command: npm run check
                 working_directory: examples/fullstack
 
       - cypress/run:
