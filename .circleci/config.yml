@@ -550,6 +550,17 @@ workflows:
                 working_directory: examples/unit-tests-js
 
       - cypress/run:
+          attach-workspace: true
+          name: example-unit-tests-ts
+          requires:
+            - cypress/install
+          # there are no jobs to follow this one
+          # so no need to save the workspace files (saves time)
+          no-workspace: true
+          command: npx cypress run --project examples/unit-tests-ts
+          # TODO: fix the TS code coverage
+
+      - cypress/run:
           name: Windows test
           executor:
             # executor comes from the "windows" orb

@@ -4,5 +4,5 @@
     "module": "commonjs",
     "moduleResolution": "node"
   },
-  "files": ["./src/**/*.ts"]
+  "files": ["src/utils/misc.ts"]
 }

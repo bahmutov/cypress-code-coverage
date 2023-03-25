@@ -2,6 +2,10 @@
   "name": "example-unit-tests-ts",
   "description": "Run unit tests written using TypeScript",
   "scripts": {
-    "cy:open": "../../node_modules/.bin/cypress open"
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "check:covered": "../../node_modules/.bin/check-coverage misc.ts",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json misc.ts",
+    "check": "npm run check:covered && npm run check:extras"
   }
 }
