@@ -8,7 +8,10 @@
     "report": "../../node_modules/.bin/nyc report",
     "clean": "rm -rf .nyc_output || true",
     "test:a": "../../node_modules/.bin/cypress run --spec cypress/integration/spec-a.js",
-    "test:b": "../../node_modules/.bin/cypress run --spec cypress/integration/spec-b.js"
+    "test:b": "../../node_modules/.bin/cypress run --spec cypress/integration/spec-b.js",
+    "check:covered": "../../node_modules/.bin/check-coverage src/a.js src/b.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json src/a.js src/b.js",
+    "check": "npm run check:covered && npm run check:extras"
   },
   "nyc": {
     "all": true,

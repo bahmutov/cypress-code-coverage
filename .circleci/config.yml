@@ -432,10 +432,7 @@ workflows:
                 # we will check the final coverage report
                 # to make sure it only has files we are interested in
                 # because there are files covered at 0 in the report
-                command: |
-                  ../../node_modules/.bin/check-coverage src/a.js
-                  ../../node_modules/.bin/check-coverage src/a.js
-                  ../../node_modules/.bin/only-covered --from coverage/coverage-final.json src/a.js src/b.js
+                command: npm run check
                 working_directory: examples/placeholders
 
       - cypress/run:
