@@ -6,7 +6,12 @@
   "scripts": {
     "start": "../../node_modules/.bin/nyc --silent node server/server",
     "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
     "dev": "../../node_modules/.bin/start-test 3003 cy:open",
-    "coverage:report": "../../node_modules/.bin/nyc report"
+    "e2e": "../../node_modules/.bin/start-test 3003 cy:run",
+    "coverage:report": "../../node_modules/.bin/nyc report",
+    "check:covered": "../../node_modules/.bin/check-coverage server.js",
+    "check:extras": "../../node_modules/.bin/only-covered server.js",
+    "check": "npm run check:covered && npm run check:extras"
   }
 }

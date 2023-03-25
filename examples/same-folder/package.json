@@ -3,6 +3,10 @@
   "description": "Check if test files are correctly filtered out",
   "devDependencies": {},
   "scripts": {
-    "cy:open": "../../node_modules/.bin/cypress open"
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "check:covered": "../../node_modules/.bin/check-coverage main.js unit-utils.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js unit-utils.js",
+    "check": "npm run check:covered && npm run check:extras"
   }
 }

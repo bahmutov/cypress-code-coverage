@@ -89,9 +89,7 @@ workflows:
                 working_directory: examples/backend
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage server.js
-                  ../../node_modules/.bin/only-covered server.js
+                command: npm run check
                 working_directory: examples/backend
 
       - cypress/run:
@@ -119,11 +117,7 @@ workflows:
                 working_directory: examples/fullstack
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage fullstack/server/server.js
-                  ../../node_modules/.bin/check-coverage fullstack/main.js
-                  ../../node_modules/.bin/check-coverage fullstack/string-utils.js
-                  ../../node_modules/.bin/only-covered server.js main.js string-utils.js
+                command: npm run check
                 working_directory: examples/fullstack
 
       - cypress/run:
@@ -231,10 +225,7 @@ workflows:
                 working_directory: examples/ts-example
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.ts
-                  ../../node_modules/.bin/check-coverage calc.ts
-                  ../../node_modules/.bin/only-covered main.ts calc.ts
+                command: npm run check
                 working_directory: examples/ts-example
 
       - cypress/run:
@@ -257,11 +248,7 @@ workflows:
                 path: examples/multiple-files/coverage
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage first.js
-                  ../../node_modules/.bin/check-coverage second.js
-                  ../../node_modules/.bin/check-coverage third.js
-                  ../../node_modules/.bin/only-covered first.js second.js third.js
+                command: npm run check
                 working_directory: examples/multiple-files
 
       - cypress/run:
@@ -339,10 +326,7 @@ workflows:
                 working_directory: examples/same-folder
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/check-coverage unit-utils.js
-                  ../../node_modules/.bin/only-covered main.js unit-utils.js
+                command: npm run check
                 working_directory: examples/same-folder
 
       - cypress/run:
@@ -371,9 +355,7 @@ workflows:
                 working_directory: examples/support-files
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/only-covered main.js
+                command: npm run check
                 working_directory: examples/support-files
 
       - cypress/run:
@@ -441,10 +423,7 @@ workflows:
                 # we will check the final coverage report
                 # to make sure it only has files we are interested in
                 # because there are files covered at 0 in the report
-                command: |
-                  ../../node_modules/.bin/check-coverage src/a.js
-                  ../../node_modules/.bin/check-coverage src/a.js
-                  ../../node_modules/.bin/only-covered --from coverage/coverage-final.json src/a.js src/b.js
+                command: npm run check
                 working_directory: examples/placeholders
 
       - cypress/run:
@@ -476,9 +455,7 @@ workflows:
                 name: Check code coverage 📈
                 # we will check the final coverage report
                 # to make sure it only has files we are interested in
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js
+                command: npm run check
                 working_directory: examples/exclude-files
 
       - cypress/run:
@@ -505,9 +482,7 @@ workflows:
                 working_directory: examples/use-plugins-and-support
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/only-covered main.js
+                command: npm run check
                 working_directory: examples/use-plugins-and-support
 
       - cypress/run:
@@ -535,9 +510,7 @@ workflows:
                 working_directory: examples/one-spec
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.js
-                  ../../node_modules/.bin/only-covered main.js
+                command: npm run check
                 working_directory: examples/one-spec
 
       - cypress/run:
@@ -565,10 +538,19 @@ workflows:
                 working_directory: examples/unit-tests-js
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage misc.js
-                  ../../node_modules/.bin/only-covered misc.js
+                command: npm run check
                 working_directory: examples/unit-tests-js
+
+      - cypress/run:
+          attach-workspace: true
+          name: example-unit-tests-ts
+          requires:
+            - cypress/install
+          # there are no jobs to follow this one
+          # so no need to save the workspace files (saves time)
+          no-workspace: true
+          command: npx cypress run --project examples/unit-tests-ts
+          # TODO: fix the TS code coverage
 
       - cypress/run:
           name: Windows test

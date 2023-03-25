@@ -3,7 +3,7 @@
 
 const dayjs = require('dayjs')
 var duration = require('dayjs/plugin/duration')
-const { filterSpecsFromCoverage } = require('./support-utils')
+const { excludeByUser } = require('./support-utils')
 
 dayjs.extend(duration)
 
@@ -22,31 +22,12 @@ const sendCoverage = (coverage, pathname = '/') => {
   let filteredCoverage = coverage
 
   const config = getCoverageConfig()
+  // console.log({ config })
 
   // by default we do not filter anything from the code coverage object
   // if the user gives a list of patters to filter, we filter the coverage object
   if (config.exclude) {
-    if (config.exclude === true) {
-      // try excluding spec and support files
-      const withoutSpecs = filterSpecsFromCoverage(coverage)
-      filteredCoverage = filterSupportFilesFromCoverage(withoutSpecs)
-    } else {
-      const filterOut = Cypress._.isString(config.exclude)
-        ? [config.exclude]
-        : config.exclude
-
-      filteredCoverage = Cypress._.omitBy(
-        coverage,
-        (fileCoverage, filename) => {
-          return filterOut.some((pattern) => {
-            if (pattern.includes('*')) {
-              return Cypress.minimatch(filename, pattern)
-            }
-            return filename.endsWith(pattern)
-          })
-        },
-      )
-    }
+    filteredCoverage = excludeByUser(config.exclude, coverage)
   }
 
   // stringify coverage object for speed
@@ -62,37 +43,6 @@ const sendCoverage = (coverage, pathname = '/') => {
  */
 const logMessage = (s) => {
   cy.log(`${s} \`[@bahmutov/cypress-code-coverage]\``)
-}
-
-/**
- * Removes support file from the coverage object.
- * If there are more files loaded from support folder, also removes them
- */
-const filterSupportFilesFromCoverage = (totalCoverage) => {
-  const integrationFolder = Cypress.config('integrationFolder')
-  const supportFile = Cypress.config('supportFile')
-
-  /** @type {string} Cypress run-time config has the support folder string */
-  // @ts-ignore
-  const supportFolder = Cypress.config('supportFolder')
-
-  const isSupportFile = (filename) => filename === supportFile
-
-  let coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
-    isSupportFile(filename),
-  )
-
-  // check the edge case
-  //   if we have files from support folder AND the support folder is not same
-  //   as the integration, or its prefix (this might remove all app source files)
-  //   then remove all files from the support folder
-  if (!integrationFolder.startsWith(supportFolder)) {
-    // remove all covered files from support folder
-    coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
-      filename.startsWith(supportFolder),
-    )
-  }
-  return coverage
 }
 
 const registerHooks = () => {

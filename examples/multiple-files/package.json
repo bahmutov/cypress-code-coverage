@@ -7,7 +7,10 @@
     "cy:run": "../../node_modules/.bin/cypress run",
     "dev": "../../node_modules/.bin/start-test 1234 cy:open",
     "e2e": "../../node_modules/.bin/start-test 1234 cy:run",
-    "report": "../../node_modules/.bin/nyc report --text"
+    "report": "../../node_modules/.bin/nyc report --text",
+    "check:covered": "../../node_modules/.bin/check-coverage first.js second.js third.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json first.js second.js third.js",
+    "check": "npm run check:covered && npm run check:extras"
   },
   "nyc": {
     "all": true,

@@ -2,22 +2,18 @@
 
 import { reverse } from './unit-utils'
 
-describe('coverage information', () => {
+describe('coverage information', { testIsolation: false }, () => {
   before(() => {
     cy.log('visiting index.html')
     cy.visit('index.html')
   })
 
   it('calls add', () => {
-    cy.window()
-      .invoke('add', 2, 3)
-      .should('equal', 5)
+    cy.window().invoke('add', 2, 3).should('equal', 5)
   })
 
   it('calls sub', () => {
-    cy.window()
-      .invoke('sub', 2, 3)
-      .should('equal', -1)
+    cy.window().invoke('sub', 2, 3).should('equal', -1)
   })
 
   it('reverses a string', () => {

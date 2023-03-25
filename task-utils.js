@@ -375,6 +375,8 @@ function findSourceFiles(nycOptions) {
   // always exclude node_modules
   // https://github.com/istanbuljs/nyc#including-files-within-node_modules
   patterns.push('!**/node_modules/**')
+  // and exclude the Cypress config file
+  patterns.push('!cypress.config.*')
 
   debug('searching files to include using patterns %o', patterns)
 

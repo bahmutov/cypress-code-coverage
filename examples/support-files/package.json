@@ -7,6 +7,11 @@
   "scripts": {
     "start": "../../node_modules/.bin/parcel serve index.html",
     "cy:open": "../../node_modules/.bin/cypress open",
-    "dev": "../../node_modules/.bin/start-test 1234 cy:open"
+    "cy:run": "../../node_modules/.bin/cypress run",
+    "dev": "../../node_modules/.bin/start-test 1234 cy:open",
+    "e2e": "../../node_modules/.bin/start-test 1234 cy:run",
+    "check:covered": "../../node_modules/.bin/check-coverage main.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js",
+    "check": "npm run check:covered && npm run check:extras"
   }
 }

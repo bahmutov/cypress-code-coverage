@@ -12,16 +12,23 @@ npm install -D @bahmutov/cypress-code-coverage
 
 Note: this plugin assumes `cypress` is a peer dependency already installed in your project.
 
-Add to your `cypress/support/index.js` file
+### Versions
+
+| Plugin version | Cypress version |
+| -------------- | --------------- |
+| v1             | < v10           |
+| v2             | >= v10          |
+
+Add to your `cypress/support/e2e.js` file
 
 ```js
 // https://github.com/bahmutov/cypress-code-coverage
 import '@bahmutov/cypress-code-coverage/support'
 ```
 
-Register the plugin from your `cypress/plugins/index.js` file
-
 ### Cypress v10+
+
+Register this plugin in your Cypress config file
 
 ```js
 // cypress.config.js
@@ -40,6 +47,15 @@ module.exports = defineConfig({
 ```
 
 ### Cypress v9
+
+Add to your `cypress/support/index.js` file
+
+```js
+// https://github.com/bahmutov/cypress-code-coverage
+import '@bahmutov/cypress-code-coverage/support'
+```
+
+Register the plugin from your `cypress/plugins/index.js` file
 
 ```js
 // cypress/plugins/index.js
