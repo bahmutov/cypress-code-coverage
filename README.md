@@ -372,40 +372,31 @@ You can exclude parts of the code or entire files from the code coverage report.
 
 ### Filter files
 
-Specify the list of files to exclude from the saved coverage report using `cypress.json`
+Specify the list of files to exclude from the saved coverage report using E2E `env` object in your `cypress.config.js` file.
 
-```json
-{
-  "env": {
-    "coverage": {
-      "exclude": ["support/commands.js", "utils/*/*.js"]
-    }
-  }
-}
+```js
+// cypress.config.js
+module.exports = defineConfig({
+  e2e: {
+    coverage: {
+      // exclude the service worker files
+      exclude: ['**/src/service*.js'],
+    },
+  },
+})
 ```
 
-By default, no files are filtered out from the code coverage object, which is equivalent to:
+You can try excluding the default specs and support files only using
 
-```json
-{
-  "env": {
-    "coverage": {
-      "exclude": false
-    }
-  }
-}
-```
-
-You can try excluding the default integration and support files only using
-
-```json
-{
-  "env": {
-    "coverage": {
-      "exclude": true
-    }
-  }
-}
+```js
+// cypress.config.js
+module.exports = defineConfig({
+  e2e: {
+    coverage: {
+      exclude: true,
+    },
+  },
+})
 ```
 
 ### Exclude "else" branch
