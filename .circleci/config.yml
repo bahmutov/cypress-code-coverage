@@ -231,10 +231,7 @@ workflows:
                 working_directory: examples/ts-example
             - run:
                 name: Check code coverage 📈
-                command: |
-                  ../../node_modules/.bin/check-coverage main.ts
-                  ../../node_modules/.bin/check-coverage calc.ts
-                  ../../node_modules/.bin/only-covered main.ts calc.ts
+                command: npm run check
                 working_directory: examples/ts-example
 
       - cypress/run:
