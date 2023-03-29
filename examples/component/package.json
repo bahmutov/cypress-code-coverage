@@ -4,8 +4,8 @@
   "scripts": {
     "cy:open": "../../node_modules/.bin/cypress open --component",
     "cy:run": "../../node_modules/.bin/cypress run  --component",
-    "check:covered": "../../node_modules/.bin/check-coverage main.js",
-    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js",
+    "check:covered": "../../node_modules/.bin/check-coverage Hello.jsx",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json Hello.jsx",
     "check": "npm run check:covered && npm run check:extras"
   },
   "devDependencies": {
