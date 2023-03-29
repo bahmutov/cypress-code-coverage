@@ -40,6 +40,41 @@ workflows:
             - run: npm run check:markdown
 
       - cypress/run:
+          name: component coverage
+          requires:
+            - cypress/install
+          # grab the workspace created by cypress/install job
+          attach-workspace: true
+          working_directory: examples/component
+          # the example has a few dependencies
+          # plus we need to play a trick to link the code coverage plugin
+          # outside the folder
+          build: |
+            pwd && \
+            ls -la && \
+            node -v && \
+            npm install && \
+            ls -la node_modules/code-coverage
+          command: '../../node_modules/.bin/cypress run --component'
+          # there are no jobs to follow this one
+          # so no need to save the workspace files (saves time)
+          no-workspace: true
+          post-steps:
+            # store the created coverage report folder
+            # you can click on it in the CircleCI UI
+            # to see live static HTML site
+            - store_artifacts:
+                path: examples/component/coverage
+            # TODO: confirm there is code coverage
+            # - run:
+            #     command: npm run coverage:report
+            #     working_directory: examples/component
+            # - run:
+            #     name: Check code coverage 📈
+            #     command: npm run check
+            #     working_directory: examples/component
+
+      - cypress/run:
           name: frontend coverage
           requires:
             - cypress/install
