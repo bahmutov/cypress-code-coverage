@@ -21,6 +21,27 @@ module.exports = defineConfig({
     devServer: {
       framework: 'create-react-app',
       bundler: 'webpack',
+      mode: 'development',
+      devtool: false,
+      module: {
+        rules: [
+          // application and Cypress files are bundled like React components
+          // and instrumented using the babel-plugin-istanbul
+          {
+            test: /\.jsx?$/,
+            // do not instrument node_modules
+            // or Cypress component specs
+            exclude: /node_modules|\.cy\.jsx/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env', '@babel/preset-react'],
+                plugins: ['istanbul'],
+              },
+            },
+          },
+        ],
+      },
     },
   },
 })
