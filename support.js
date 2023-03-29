@@ -41,8 +41,11 @@ const sendCoverage = (coverage, pathname = '/') => {
  * so the user knows the log message is coming from this plugin.
  * @param {string} s Message to log.
  */
-const logMessage = (s) => {
-  cy.log(`${s} \`[@bahmutov/cypress-code-coverage]\``)
+const logMessage = (message) => {
+  const logInstance = Cypress.log({
+    name: 'Coverage',
+    message,
+  })
 }
 
 const registerHooks = () => {
@@ -97,10 +100,17 @@ const registerHooks = () => {
         return
       }
 
-      windowCoverageObjects.push({
-        coverage: applicationSourceCoverage,
-        pathname: win.location.pathname,
-      })
+      if (Cypress.spec.specType === 'component') {
+        windowCoverageObjects.push({
+          coverage: applicationSourceCoverage,
+          pathname: Cypress.spec.relative,
+        })
+      } else {
+        windowCoverageObjects.push({
+          coverage: applicationSourceCoverage,
+          pathname: win.location.pathname,
+        })
+      }
     }
 
     // save reference to coverage for each app window loaded in the test
@@ -114,13 +124,15 @@ const registerHooks = () => {
     // save coverage after the test
     // because now the window coverage objects have been updated
     windowCoverageObjects.forEach((cover) => {
+      debugger
       sendCoverage(cover.coverage, cover.pathname)
     })
 
-    cy.task('reportSpecCovers', {
-      specCovers: Cypress.env('specCovers'),
-      spec: Cypress.spec,
-    })
+    const taskOptions = { spec: Cypress.spec }
+    if (Cypress.env('specCovers')) {
+      taskOptions.specCovers = Cypress.env('specCovers')
+    }
+    cy.task('reportSpecCovers', taskOptions)
 
     if (!hasE2ECoverage()) {
       if (hasUnitTestCoverage()) {
@@ -207,7 +219,7 @@ const registerHooks = () => {
     // @ts-ignore
     const unitTestCoverage = window.__coverage__
     if (unitTestCoverage) {
-      sendCoverage(unitTestCoverage, 'unit')
+      sendCoverage(unitTestCoverage, 'component tests')
     }
   })
 
