@@ -44,7 +44,7 @@ const sendCoverage = (coverage, pathname = '/') => {
 /**
  * Consistently logs the given string to the Command Log
  * so the user knows the log message is coming from this plugin.
- * @param {string} s Message to log.
+ * @param {string} message String message to log.
  */
 const logMessage = (message) => {
   const logInstance = Cypress.log({
