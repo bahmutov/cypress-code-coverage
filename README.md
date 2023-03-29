@@ -485,6 +485,7 @@ npm run dev:no:coverage
 
 ## Links
 
+- 🎓 Take my course [Testing The Swag Store](https://cypress.tips/courses/swag-store) that shows e2e and component code coverage
 - Read the [Cypress code coverage guide](http://on.cypress.io/code-coverage)
 - Read ["Code Coverage by Parcel Bundler"](https://glebbahmutov.com/blog/code-coverage-by-parcel/) blog post
 - Read ["Combined End-to-end and Unit Test Coverage"](https://glebbahmutov.com/blog/combined-end-to-end-and-unit-test-coverage/)
