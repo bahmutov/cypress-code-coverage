@@ -65,14 +65,13 @@ workflows:
             # to see live static HTML site
             - store_artifacts:
                 path: examples/component/coverage
-            # TODO: confirm there is code coverage
-            # - run:
-            #     command: npm run coverage:report
-            #     working_directory: examples/component
-            # - run:
-            #     name: Check code coverage 📈
-            #     command: npm run check
-            #     working_directory: examples/component
+            - run:
+                command: npm run coverage:report
+                working_directory: examples/component
+            - run:
+                name: Check code coverage 📈
+                command: npm run check
+                working_directory: examples/component
 
       - cypress/run:
           name: frontend coverage

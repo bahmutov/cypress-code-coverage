@@ -3,7 +3,10 @@
 
 const dayjs = require('dayjs')
 var duration = require('dayjs/plugin/duration')
-const { excludeByUser } = require('./support-utils')
+const {
+  excludeByUser,
+  filterSupportFilesFromCoverage,
+} = require('./support-utils')
 
 dayjs.extend(duration)
 
@@ -28,6 +31,8 @@ const sendCoverage = (coverage, pathname = '/') => {
   // if the user gives a list of patters to filter, we filter the coverage object
   if (config.exclude) {
     filteredCoverage = excludeByUser(config.exclude, coverage)
+  } else if (Cypress.spec.specType === 'component') {
+    filteredCoverage = filterSupportFilesFromCoverage(coverage)
   }
 
   // stringify coverage object for speed
@@ -39,10 +44,13 @@ const sendCoverage = (coverage, pathname = '/') => {
 /**
  * Consistently logs the given string to the Command Log
  * so the user knows the log message is coming from this plugin.
- * @param {string} s Message to log.
+ * @param {string} message String message to log.
  */
-const logMessage = (s) => {
-  cy.log(`${s} \`[@bahmutov/cypress-code-coverage]\``)
+const logMessage = (message) => {
+  const logInstance = Cypress.log({
+    name: 'Coverage',
+    message,
+  })
 }
 
 const registerHooks = () => {
@@ -97,10 +105,17 @@ const registerHooks = () => {
         return
       }
 
-      windowCoverageObjects.push({
-        coverage: applicationSourceCoverage,
-        pathname: win.location.pathname,
-      })
+      if (Cypress.spec.specType === 'component') {
+        windowCoverageObjects.push({
+          coverage: applicationSourceCoverage,
+          pathname: Cypress.spec.relative,
+        })
+      } else {
+        windowCoverageObjects.push({
+          coverage: applicationSourceCoverage,
+          pathname: win.location.pathname,
+        })
+      }
     }
 
     // save reference to coverage for each app window loaded in the test
@@ -117,10 +132,11 @@ const registerHooks = () => {
       sendCoverage(cover.coverage, cover.pathname)
     })
 
-    cy.task('reportSpecCovers', {
-      specCovers: Cypress.env('specCovers'),
-      spec: Cypress.spec,
-    })
+    const taskOptions = { spec: Cypress.spec }
+    if (Cypress.env('specCovers')) {
+      taskOptions.specCovers = Cypress.env('specCovers')
+    }
+    cy.task('reportSpecCovers', taskOptions)
 
     if (!hasE2ECoverage()) {
       if (hasUnitTestCoverage()) {
@@ -205,9 +221,12 @@ const registerHooks = () => {
     // NOTE: spec iframe is NOT reset between the tests, so we can grab
     // the coverage information only once after all tests have finished
     // @ts-ignore
-    const unitTestCoverage = window.__coverage__
-    if (unitTestCoverage) {
-      sendCoverage(unitTestCoverage, 'unit')
+    if (window.__coverage__) {
+      const unitTestCoverage = filterSupportFilesFromCoverage(
+        // @ts-ignore
+        window.__coverage__,
+      )
+      sendCoverage(unitTestCoverage, 'component tests')
     }
   })
 
