@@ -46,6 +46,8 @@ workflows:
           # grab the workspace created by cypress/install job
           attach-workspace: true
           working_directory: examples/component
+          # the example has a few dependencies
+          build: npm install
           command: '../../node_modules/.bin/cypress run --component'
 
           # there are no jobs to follow this one
