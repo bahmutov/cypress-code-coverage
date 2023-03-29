@@ -50,7 +50,8 @@ workflows:
           # plus we need to play a trick to link the code coverage plugin
           # outside the folder
           build: |
-            cd examples/component && \
+            pwd && \
+            ls -la && \
             npm install && \
             mkdir -p node_modules/code_coverage && \
             cp cc.json node_modules/code_coverage/package.json
