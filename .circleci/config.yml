@@ -52,9 +52,7 @@ workflows:
           build: |
             pwd && \
             ls -la && \
-            npm install && \
-            mkdir -p node_modules/code_coverage && \
-            cp cc.json node_modules/code_coverage/package.json
+            ls -la node_modules/code-coverage
           command: '../../node_modules/.bin/cypress run --component'
           # there are no jobs to follow this one
           # so no need to save the workspace files (saves time)

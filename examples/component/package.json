@@ -2,6 +2,7 @@
   "name": "example-component-spec",
   "description": "Only running a single component spec",
   "scripts": {
+    "postinstall": "mkdir -p node_modules/code-coverage && cp cc.json node_modules/code-coverage/package.json",
     "cy:open": "../../node_modules/.bin/cypress open --component",
     "cy:run": "../../node_modules/.bin/cypress run  --component",
     "check:covered": "../../node_modules/.bin/check-coverage Hello.jsx",
@@ -9,6 +10,7 @@
     "check": "npm run check:covered && npm run check:extras"
   },
   "devDependencies": {
+    "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "^5.0.1"
   },
