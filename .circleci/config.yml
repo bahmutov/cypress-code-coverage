@@ -52,6 +52,8 @@ workflows:
           build: |
             pwd && \
             ls -la && \
+            node -v && \
+            npm install && \
             ls -la node_modules/code-coverage
           command: '../../node_modules/.bin/cypress run --component'
           # there are no jobs to follow this one
