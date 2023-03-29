@@ -5,8 +5,8 @@
     "postinstall": "mkdir -p node_modules/code-coverage && cp cc.json node_modules/code-coverage/package.json",
     "cy:open": "../../node_modules/.bin/cypress open --component",
     "cy:run": "../../node_modules/.bin/cypress run  --component",
-    "check:covered": "../../node_modules/.bin/check-coverage Hello.jsx",
-    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json Hello.jsx",
+    "check:covered": "../../node_modules/.bin/check-coverage Hello.jsx calc.js",
+    "check:extras": "../../node_modules/.bin/only-covered Hello.jsx calc.js",
     "check": "npm run check:covered && npm run check:extras",
     "coverage:report": "../../node_modules/.bin/nyc report",
     "clean": "rm -rf .nyc_output coverage"
