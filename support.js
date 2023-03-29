@@ -3,7 +3,10 @@
 
 const dayjs = require('dayjs')
 var duration = require('dayjs/plugin/duration')
-const { excludeByUser } = require('./support-utils')
+const {
+  excludeByUser,
+  filterSupportFilesFromCoverage,
+} = require('./support-utils')
 
 dayjs.extend(duration)
 
@@ -28,6 +31,8 @@ const sendCoverage = (coverage, pathname = '/') => {
   // if the user gives a list of patters to filter, we filter the coverage object
   if (config.exclude) {
     filteredCoverage = excludeByUser(config.exclude, coverage)
+  } else if (Cypress.spec.specType === 'component') {
+    filteredCoverage = filterSupportFilesFromCoverage(coverage)
   }
 
   // stringify coverage object for speed
@@ -124,7 +129,6 @@ const registerHooks = () => {
     // save coverage after the test
     // because now the window coverage objects have been updated
     windowCoverageObjects.forEach((cover) => {
-      debugger
       sendCoverage(cover.coverage, cover.pathname)
     })
 
@@ -217,8 +221,11 @@ const registerHooks = () => {
     // NOTE: spec iframe is NOT reset between the tests, so we can grab
     // the coverage information only once after all tests have finished
     // @ts-ignore
-    const unitTestCoverage = window.__coverage__
-    if (unitTestCoverage) {
+    if (window.__coverage__) {
+      const unitTestCoverage = filterSupportFilesFromCoverage(
+        // @ts-ignore
+        window.__coverage__,
+      )
       sendCoverage(unitTestCoverage, 'component tests')
     }
   })

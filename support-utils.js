@@ -138,5 +138,6 @@ const filterSupportFilesFromCoverage = (totalCoverage) => {
 module.exports = {
   fixSourcePaths,
   filterSpecsFromCoverage,
+  filterSupportFilesFromCoverage,
   excludeByUser,
 }
