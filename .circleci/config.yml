@@ -49,7 +49,7 @@ workflows:
           # the example has a few dependencies
           # plus we need to play a trick to link the code coverage plugin
           # outside the folder
-          build: npm install && cp cc.json node_modules/code_coverage/package.json
+          build: npm install && mkdir -p node_modules/code_coverage && cp cc.json node_modules/code_coverage/package.json
           command: '../../node_modules/.bin/cypress run --component'
 
           # there are no jobs to follow this one
