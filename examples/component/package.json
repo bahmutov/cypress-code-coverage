@@ -1,0 +1,29 @@
+{
+  "name": "example-component-spec",
+  "description": "Only running a single component spec",
+  "scripts": {
+    "cy:open": "../../node_modules/.bin/cypress open --component",
+    "cy:run": "../../node_modules/.bin/cypress run  --component",
+    "check:covered": "../../node_modules/.bin/check-coverage main.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json main.js",
+    "check": "npm run check:covered && npm run check:extras"
+  },
+  "devDependencies": {
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "ie 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "ie 11"
+    ]
+  }
+}
