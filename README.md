@@ -453,6 +453,24 @@ For example, if you want to only include files in the `app` folder, but exclude 
 
 Another important option is `excludeAfterRemap`. By default it is false, which might let excluded files through. If you are excluding the files, and the instrumenter does not respect the `nyc.exclude` setting, then add `excludeAfterRemap: true` to tell `nyc report` to exclude files. See [examples/exclude-files](examples/exclude-files).
 
+## Quiet mode
+
+You can hide plugin's Command Log messages by using the `quiet: true` option
+
+```js
+// cypress.config.js objects
+{
+  e2e: {
+    env: {
+      coverage: {
+        // false by default
+        quiet: true
+      }
+    }
+  }
+}
+```
+
 ## Disable plugin
 
 You can skip the client-side code coverage hooks by setting the environment variable `coverage` to `false`.

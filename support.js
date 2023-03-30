@@ -20,11 +20,14 @@ function getCoverageConfig() {
  * via "cy.task".
  */
 const sendCoverage = (coverage, pathname = '/') => {
-  logMessage(`Saving code coverage for **${pathname}**`)
+  const config = getCoverageConfig()
+
+  if (!config.quiet) {
+    logMessage(`Saving code coverage for **${pathname}**`)
+  }
 
   let filteredCoverage = coverage
 
-  const config = getCoverageConfig()
   // console.log({ config })
 
   // by default we do not filter anything from the code coverage object
@@ -62,13 +65,18 @@ const registerHooks = () => {
   const hasUnitTestCoverage = () => Boolean(window.__coverage__)
 
   before(() => {
-    // we need to reset the coverage when running
-    // in the interactive mode, otherwise the counters will
-    // keep increasing every time we rerun the tests
-    const logInstance = Cypress.log({
-      name: 'Coverage',
-      message: ['Reset [@bahmutov/cypress-code-coverage]'],
-    })
+    const config = getCoverageConfig()
+    let logInstance
+
+    if (!config.quiet) {
+      // we need to reset the coverage when running
+      // in the interactive mode, otherwise the counters will
+      // keep increasing every time we rerun the tests
+      logInstance = Cypress.log({
+        name: 'Coverage',
+        message: ['Reset [@bahmutov/cypress-code-coverage]'],
+      })
+    }
 
     cy.task(
       'resetCoverage',
@@ -79,7 +87,9 @@ const registerHooks = () => {
       },
       { log: false },
     ).then(() => {
-      logInstance.end()
+      if (logInstance) {
+        logInstance.end()
+      }
     })
   })
 
@@ -136,11 +146,18 @@ const registerHooks = () => {
     if (Cypress.env('specCovers')) {
       taskOptions.specCovers = Cypress.env('specCovers')
     }
-    cy.task('reportSpecCovers', taskOptions)
+
+    const config = getCoverageConfig()
+    const taskLogOptions = {
+      log: !config.quiet,
+    }
+    cy.task('reportSpecCovers', taskOptions, taskLogOptions)
 
     if (!hasE2ECoverage()) {
       if (hasUnitTestCoverage()) {
-        logMessage(`👉 Only found unit test code coverage.`)
+        if (!config.quiet) {
+          logMessage(`👉 Only found unit test code coverage.`)
+        }
       } else {
         const expectBackendCoverageOnly = Cypress._.get(
           Cypress.env('codeCoverage'),
@@ -231,11 +248,16 @@ const registerHooks = () => {
   })
 
   after(function generateReport() {
-    // when all tests finish, lets generate the coverage report
-    const logInstance = Cypress.log({
-      name: 'Coverage',
-      message: ['Generating report [@bahmutov/cypress-code-coverage]'],
-    })
+    const config = getCoverageConfig()
+    let logInstance
+
+    if (!config.quiet) {
+      // when all tests finish, lets generate the coverage report
+      logInstance = Cypress.log({
+        name: 'Coverage',
+        message: ['Generating report [@bahmutov/cypress-code-coverage]'],
+      })
+    }
 
     const options = {
       specCovers: Cypress.env('specCovers'),
@@ -244,10 +266,12 @@ const registerHooks = () => {
       timeout: dayjs.duration(3, 'minutes').asMilliseconds(),
       log: false,
     }).then((coverageReportFolder) => {
-      logInstance.set('consoleProps', () => ({
-        'coverage report folder': coverageReportFolder,
-      }))
-      logInstance.end()
+      if (logInstance) {
+        logInstance.set('consoleProps', () => ({
+          'coverage report folder': coverageReportFolder,
+        }))
+        logInstance.end()
+      }
       return coverageReportFolder
     })
   })
