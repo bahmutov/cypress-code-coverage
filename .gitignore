@@ -10,3 +10,5 @@ cypress-coverage/
 examples/*/cypress/videos
 examples/*/cypress/screenshots
 yarn.lock
+cc1
+cc2

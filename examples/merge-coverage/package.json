@@ -8,6 +8,7 @@
     "check:covered": "../../node_modules/.bin/check-coverage misc.js",
     "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json misc.js",
     "check": "npm run check:covered && npm run check:extras",
-    "clean": "rm -rf .nyc_output && rm -rf coverage"
+    "clean": "rm -rf .nyc_output && rm -rf coverage",
+    "merge": "DEBUG=code-coverage ../../bin/cc-merge.js ."
   }
 }
