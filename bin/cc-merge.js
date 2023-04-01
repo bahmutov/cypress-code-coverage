@@ -49,3 +49,14 @@ allFiles.forEach((filename, k) => {
   fs.copyFileSync(filename, outputFilename)
   debug('%d: copied %s to %s', k + 1, filename, outputFilename)
 })
+
+const { getNycOptions } = require('../task-utils')
+
+const processWorkingDirectory = process.cwd()
+const nycReportOptions = getNycOptions(processWorkingDirectory)
+debug('calling NYC reporter with options %o', nycReportOptions)
+debug('current working directory is %s', processWorkingDirectory)
+const NYC = require('nyc')
+const nyc = new NYC(nycReportOptions)
+
+nyc.report()

@@ -2,6 +2,11 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   e2e: {
+    env: {
+      coverage: {
+        exclude: '**/cypress/**',
+      },
+    },
     fixturesFolder: false,
     video: false,
     // We've imported your old cypress plugins here.
