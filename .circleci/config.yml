@@ -127,6 +127,35 @@ workflows:
                 working_directory: examples/backend
 
       - cypress/run:
+          name: merge coverage
+          requires:
+            - cypress/install
+          # grab the workspace created by cypress/install job
+          attach-workspace: true
+          working_directory: examples/merge-coverage
+          command: 'npm run cy:run1 && npm run cy:run2'
+
+          # there are no jobs to follow this one
+          # so no need to save the workspace files (saves time)
+          no-workspace: true
+          post-steps:
+            - run:
+                command: npm run merge
+
+            # store the created coverage report folder
+            # you can click on it in the CircleCI UI
+            # to see live static HTML site
+            - store_artifacts:
+                path: examples/merge-coverage/coverage
+            - run:
+                command: npm run report
+                working_directory: examples/merge-coverage
+            - run:
+                name: Check code coverage 📈
+                command: npm run check
+                working_directory: examples/merge-coverage
+
+      - cypress/run:
           name: fullstack coverage
           requires:
             - cypress/install
