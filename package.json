@@ -40,8 +40,12 @@
   "homepage": "https://github.com/bahmutov/cypress-code-coverage#readme",
   "files": [
     "*.js",
-    "middleware"
+    "middleware",
+    "bin"
   ],
+  "bin": {
+    "cc-merge": "bin/cc-merge.js"
+  },
   "publishConfig": {
     "access": "public"
   },
