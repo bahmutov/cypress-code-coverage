@@ -1,0 +1,15 @@
+{
+  "name": "example-merge-coverage",
+  "description": "Merge partial code coverage reports",
+  "scripts": {
+    "cy:open": "../../node_modules/.bin/cypress open",
+    "cy:run1": "npm run clean && rm -rf cc1 && ../../node_modules/.bin/cypress run --spec cypress/e2e/add.cy.js && mv coverage cc1",
+    "cy:run2": "npm run clean && rm -rf cc2 && ../../node_modules/.bin/cypress run --spec cypress/e2e/sub.cy.js && mv coverage cc2",
+    "check:covered": "../../node_modules/.bin/check-coverage --from coverage/coverage-final.json math.js",
+    "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json math.js",
+    "check": "npm run check:covered && npm run check:extras",
+    "clean": "rm -rf .nyc_output && rm -rf coverage",
+    "merge": "DEBUG=code-coverage ../../bin/cc-merge.js .",
+    "report": "../../node_modules/.bin/nyc report"
+  }
+}

@@ -501,6 +501,31 @@ npm run dev
 npm run dev:no:coverage
 ```
 
+## Merge coverage reports
+
+When running tests in parallel, you can download all coverage folders into one top folder and then merge the coverage and regenerate new combined report using `cc-merge` command included in this module.
+
+For example, if this is the top folder with downloaded coverage subfolders:
+
+```
+project/
+  reports/
+    one/
+      coverage-final.json
+    two/
+      coverage-final.json
+    three/
+      coverage-final.json
+```
+
+Use this command to combine all `coverage-final.json` files
+
+```
+npx cc-merge reports
+```
+
+The coverage will be written into `.nyc_output` folder (which is automatically cleared) and the reports will be written into `coverage` folder.
+
 ## Links
 
 - 🎓 Take my course [Testing The Swag Store](https://cypress.tips/courses/swag-store) that shows e2e and component code coverage
