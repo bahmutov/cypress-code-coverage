@@ -16,6 +16,7 @@ const coverageFilename = 'coverage-final.json'
 debug('looking for %s files in %s', coverageFilename, topCoverageFolder)
 
 const fs = require('fs')
+const rimraf = require('rimraf')
 const path = require('path')
 const globby = require('globby')
 const allFiles = globby.sync(`**/${coverageFilename}`, {
@@ -37,7 +38,7 @@ if (!allFiles.length) {
 const nycOutputFolder = '.nyc_output'
 if (fs.existsSync(nycOutputFolder)) {
   debug('deleting the existing folder %s', nycOutputFolder)
-  fs.rmSync(nycOutputFolder, { recursive: true })
+  rimraf.nativeSync(nycOutputFolder)
 }
 
 if (!fs.existsSync(nycOutputFolder)) {
