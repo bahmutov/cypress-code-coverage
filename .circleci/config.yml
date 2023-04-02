@@ -36,7 +36,6 @@ workflows:
       - unit
 
       - cypress/install:
-          executor: cypress/browsers-chrome99-ff97
           post-steps:
             - run: npm run check:markdown
 
