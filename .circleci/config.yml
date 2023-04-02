@@ -134,7 +134,7 @@ workflows:
           # grab the workspace created by cypress/install job
           attach-workspace: true
           working_directory: examples/merge-coverage
-          command: 'npm run cy:run1 && npm run cy:run2'
+          command: 'npm run cy:run1 && npm run report && npm run cy:run2 && npm run report'
 
           # there are no jobs to follow this one
           # so no need to save the workspace files (saves time)
