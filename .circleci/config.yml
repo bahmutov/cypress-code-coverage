@@ -141,7 +141,7 @@ workflows:
           post-steps:
             - run:
                 command: npm run merge
-
+                working_directory: examples/merge-coverage
             # store the created coverage report folder
             # you can click on it in the CircleCI UI
             # to see live static HTML site
