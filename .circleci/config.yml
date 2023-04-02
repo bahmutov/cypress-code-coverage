@@ -36,6 +36,7 @@ workflows:
       - unit
 
       - cypress/install:
+          executor: cypress/base-16-14-2
           post-steps:
             - run: npm run check:markdown
 
@@ -128,6 +129,7 @@ workflows:
 
       - cypress/run:
           name: merge coverage
+          executor: cypress/base-16-14-2
           requires:
             - cypress/install
           # grab the workspace created by cypress/install job
