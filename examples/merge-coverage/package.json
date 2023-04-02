@@ -9,6 +9,7 @@
     "check:extras": "../../node_modules/.bin/only-covered --from coverage/coverage-final.json math.js",
     "check": "npm run check:covered && npm run check:extras",
     "clean": "rm -rf .nyc_output && rm -rf coverage",
-    "merge": "DEBUG=code-coverage ../../bin/cc-merge.js ."
+    "merge": "DEBUG=code-coverage ../../bin/cc-merge.js .",
+    "report": "../../node_modules/.bin/nyc report"
   }
 }
