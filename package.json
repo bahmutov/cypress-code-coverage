@@ -41,6 +41,7 @@
   "homepage": "https://github.com/bahmutov/cypress-code-coverage#readme",
   "files": [
     "*.js",
+    "src",
     "middleware",
     "bin"
   ],
