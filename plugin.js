@@ -75,32 +75,26 @@ function registerCodeCoveragePlugin(on, config) {
             ]
             debug(row)
 
-            // only output the GitHub summary table AFTER the run
-            // because GH does not show the summary before the job finishes
-            // so we might as well wait for all spec results to come in
-            on('after:run', () => {
-              // https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
-              ghCore.summary
-                .addHeading('Code coverage')
-                .addTable([
-                  [
-                    { data: 'Statements %', header: true },
-                    { data: '', header: true },
-                    { data: 'Branches %', header: true },
-                    { data: '', header: true },
-                    { data: 'Functions %', header: true },
-                    { data: '', header: true },
-                    { data: 'Lines %', header: true },
-                    { data: '', header: true },
-                  ],
-                  row,
-                ])
-                .addLink(
-                  '@bahmutov/cypress-code-coverage',
-                  'https://github.com/bahmutov/cypress-code-coverage',
-                )
-                .write()
-            })
+            ghCore.summary
+              .addHeading('Code coverage')
+              .addTable([
+                [
+                  { data: 'Statements %', header: true },
+                  { data: '', header: true },
+                  { data: 'Branches %', header: true },
+                  { data: '', header: true },
+                  { data: 'Functions %', header: true },
+                  { data: '', header: true },
+                  { data: 'Lines %', header: true },
+                  { data: '', header: true },
+                ],
+                row,
+              ])
+              .addLink(
+                '@bahmutov/cypress-code-coverage',
+                'https://github.com/bahmutov/cypress-code-coverage',
+              )
+              .write()
           } else {
             debug('could not find totals in %s', summaryFilename)
           }
