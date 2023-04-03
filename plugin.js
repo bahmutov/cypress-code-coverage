@@ -64,13 +64,13 @@ function registerCodeCoveragePlugin(on, config) {
             const f = summary.total.functions
             const l = summary.total.lines
             const row = [
-              s.pct,
+              String(s.pct),
               `${s.covered}/${s.total}`,
-              b.pct,
+              String(b.pct),
               `${b.covered}/${b.total}`,
-              f.pct,
+              String(f.pct),
               `${f.covered}/${f.total}`,
-              l.pct,
+              String(l.pct),
               `${l.covered}/${l.total}`,
             ]
             debug(row)
