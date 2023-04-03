@@ -55,7 +55,7 @@ function reportCodeCoverageGHA() {
       debug(row)
 
       ghCore.summary
-        .addHeading('Code coverage')
+        .addHeading('Combined code coverage')
         .addTable([
           [
             { data: 'Statements %', header: true },
