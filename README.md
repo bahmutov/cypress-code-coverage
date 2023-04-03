@@ -535,6 +535,25 @@ The coverage will be written into `.nyc_output` folder (which is automatically c
 - If you are using React, check out [@cypress/instrument-cra](https://github.com/cypress-io/instrument-cra)
 - Watch videos in [Cypress Tips & Tricks](https://www.youtube.com/playlist?list=PLP9o9QNnQuAYYRpJzDNWpeuOVTwxmIxcI) playlist
 
+## GitHub Actions
+
+When using this plugin with GitHub Actions, if reporting is enabled, then each job summary will include the current final percentages in the Actions summary report.
+
+![Summary table](./images/summary.png)
+
+The table headers emoji depend on the percentage coverage
+
+| Coverage % | Emoji |
+| ---------- | ----- |
+| >= 95      | ✅    |
+| >= 90      | 🏆    |
+| >= 80      | 🥇    |
+| >= 70      | 🥈    |
+| >= 60      | 🥉    |
+| >= 50      | 📈    |
+| >= 40      | ⚠️    |
+| < 40       | 🪫     |
+
 ## Examples
 
 ### Internal examples

@@ -14,9 +14,40 @@ jobs:
           build: npm run types
           start: npm start
 
+  test-merge-coverage:
+    runs-on: ubuntu-20.04
+    env:
+      DEBUG: code-coverage
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install dependencies 🧪
+        # https://github.com/cypress-io/github-action
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+
+      - name: Merge coverage tests
+        working-directory: examples/merge-coverage
+        run: |
+          npm run cy:run1
+          npm run cy:run2
+          npm run merge
+
+  release:
+    needs: [test, test-merge-coverage]
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install only the semantic release 📦
+        run: npm install semantic-release
+
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v3
-        if: github.ref == 'refs/heads/main'
         with:
           branch: main
         env:
