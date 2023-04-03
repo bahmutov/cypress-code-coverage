@@ -10,10 +10,25 @@ const path = require('path')
 const nycFilename = getNycReportFilename(process.cwd())
 
 function pickCoverageEmoji(percentage) {
-  if (percentage >= 90) {
+  if (percentage >= 95) {
     return '✅'
   }
+  if (percentage >= 90) {
+    return '🏆'
+  }
+  if (percentage >= 80) {
+    return '🥇'
+  }
   if (percentage >= 70) {
+    return '🥈'
+  }
+  if (percentage >= 60) {
+    return '🥉'
+  }
+  if (percentage >= 50) {
+    return '📈'
+  }
+  if (percentage >= 40) {
     return '⚠️'
   }
   return '🪫'
