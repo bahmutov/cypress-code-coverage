@@ -52,6 +52,7 @@ allFiles.forEach((filename, k) => {
 })
 
 const { getNycOptions } = require('../task-utils')
+const { reportCodeCoverageGHA } = require('../src/utils')
 
 const processWorkingDirectory = process.cwd()
 const nycReportOptions = getNycOptions(processWorkingDirectory)
@@ -60,4 +61,9 @@ debug('current working directory is %s', processWorkingDirectory)
 const NYC = require('nyc')
 const nyc = new NYC(nycReportOptions)
 
-nyc.report()
+nyc.report().then(() => {
+  if (process.env.GITHUB_ACTIONS) {
+    debug('will report combined code coverage on GitHub Actions')
+    reportCodeCoverageGHA('Combined code coverage')
+  }
+})

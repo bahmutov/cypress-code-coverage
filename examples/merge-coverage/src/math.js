@@ -5,6 +5,9 @@
  */
 export const add = (a, b) => {
   console.log('add %d to %d', a, b)
+  if (a === 2) {
+    console.log('a is 2')
+  }
   return a + b
 }
 
