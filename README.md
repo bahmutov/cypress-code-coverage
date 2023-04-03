@@ -539,6 +539,21 @@ The coverage will be written into `.nyc_output` folder (which is automatically c
 
 When using this plugin with GitHub Actions, if reporting is enabled, then each job summary will include the current final percentages in the Actions summary report.
 
+![Summary table](./images/summary.png)
+
+The table headers emoji depend on the percentage coverage
+
+| Coverage % | Emoji |
+| ---------- | ----- |
+| >= 95      | ✅    |
+| >= 90      | 🏆    |
+| >= 80      | 🥇    |
+| >= 70      | 🥈    |
+| >= 60      | 🥉    |
+| >= 50      | 📈    |
+| >= 40      | ⚠️    |
+| < 40       | 🪫     |
+
 ## Examples
 
 ### Internal examples
