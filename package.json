@@ -16,7 +16,8 @@
     "format:check": "prettier --check '*.js'",
     "check:markdown": "find *.md -exec npx markdown-link-check {} \\;",
     "effective:config": "circleci config process .circleci/config.yml | sed /^#/d",
-    "types": "tsc --noEmit --allowJs *.js cypress/e2e/*.js"
+    "types": "tsc --noEmit --allowJs *.js cypress/e2e/*.js",
+    "clean": "rm -rf .nyc_output coverage"
   },
   "peerDependencies": {
     "cypress": ">=10.0.0"
@@ -51,6 +52,7 @@
   },
   "private": false,
   "dependencies": {
+    "@actions/core": "^1.10.0",
     "@cypress/browserify-preprocessor": "3.0.2",
     "chalk": "4.1.2",
     "console.table": "^0.10.0",
