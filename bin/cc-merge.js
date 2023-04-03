@@ -64,6 +64,6 @@ const nyc = new NYC(nycReportOptions)
 nyc.report().then(() => {
   if (process.env.GITHUB_ACTIONS) {
     debug('will report combined code coverage on GitHub Actions')
-    reportCodeCoverageGHA()
+    reportCodeCoverageGHA('Combined code coverage')
   }
 })

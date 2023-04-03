@@ -30,7 +30,7 @@ function pickCoverageEmoji(percentage) {
   return '🪫'
 }
 
-function reportCodeCoverageGHA() {
+function reportCodeCoverageGHA(heading = 'Code coverage') {
   const summaryFilename = path.join('coverage', 'coverage-summary.json')
   if (!existsSync(summaryFilename)) {
     debug('cannot find summary file %s', summaryFilename)
@@ -55,7 +55,7 @@ function reportCodeCoverageGHA() {
       debug(row)
 
       ghCore.summary
-        .addHeading('Combined code coverage')
+        .addHeading(heading)
         .addTable([
           [
             { data: 'Statements %', header: true },
