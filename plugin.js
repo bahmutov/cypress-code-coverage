@@ -9,6 +9,16 @@ const path = require('path')
 
 const nycFilename = getNycReportFilename(process.cwd())
 
+function pickCoverageEmoji(percentage) {
+  if (percentage >= 90) {
+    return '✅'
+  }
+  if (percentage >= 70) {
+    return '⚠️'
+  }
+  return '🪫'
+}
+
 function registerCodeCoveragePlugin(on, config) {
   require('./task')(on, config)
 
@@ -80,13 +90,13 @@ function registerCodeCoveragePlugin(on, config) {
               .addTable([
                 [
                   { data: 'Statements %', header: true },
-                  { data: '', header: true },
+                  { data: pickCoverageEmoji(s.pct), header: true },
                   { data: 'Branches %', header: true },
-                  { data: '', header: true },
+                  { data: pickCoverageEmoji(b.pct), header: true },
                   { data: 'Functions %', header: true },
-                  { data: '', header: true },
+                  { data: pickCoverageEmoji(f.pct), header: true },
                   { data: 'Lines %', header: true },
-                  { data: '', header: true },
+                  { data: pickCoverageEmoji(l.pct), header: true },
                 ],
                 row,
               ])
