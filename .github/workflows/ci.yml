@@ -16,6 +16,8 @@ jobs:
 
   test-merge-coverage:
     runs-on: ubuntu-20.04
+    env:
+      DEBUG: code-coverage
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v3
