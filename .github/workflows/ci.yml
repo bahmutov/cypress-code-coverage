@@ -14,9 +14,19 @@ jobs:
           build: npm run types
           start: npm start
 
+  release:
+    needs: [test]
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v3
+
+      - name: Install only the semantic release 📦
+        run: npm install semantic-release
+
       - name: Semantic Release 🚀
         uses: cycjimmy/semantic-release-action@v3
-        if: github.ref == 'refs/heads/main'
         with:
           branch: main
         env:
