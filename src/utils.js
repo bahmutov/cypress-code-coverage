@@ -31,6 +31,10 @@ function pickCoverageEmoji(percentage) {
 }
 
 function reportCodeCoverageGHA(heading = 'Code coverage') {
+  if (typeof heading !== 'string') {
+    debug(heading)
+    throw new Error('Expected a string heading when reporting CC on GHA')
+  }
   const summaryFilename = path.join('coverage', 'coverage-summary.json')
   if (!existsSync(summaryFilename)) {
     debug('cannot find summary file %s', summaryFilename)
@@ -80,4 +84,13 @@ function reportCodeCoverageGHA(heading = 'Code coverage') {
   }
 }
 
-module.exports = { pickCoverageEmoji, reportCodeCoverageGHA }
+function reportCodeCoverageGHACallback() {
+  // we could use the test run summary passed in "after:run" event
+  return reportCodeCoverageGHA()
+}
+
+module.exports = {
+  pickCoverageEmoji,
+  reportCodeCoverageGHA,
+  reportCodeCoverageGHACallback,
+}

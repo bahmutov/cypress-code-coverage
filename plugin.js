@@ -4,7 +4,7 @@ const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
 const NYC = require('nyc')
 const debug = require('debug')('code-coverage')
-const { reportCodeCoverageGHA } = require('./src/utils')
+const { reportCodeCoverageGHACallback } = require('./src/utils')
 
 const nycFilename = getNycReportFilename(process.cwd())
 
@@ -50,7 +50,7 @@ function registerCodeCoveragePlugin(on, config) {
 
     if (process.env.GITHUB_ACTIONS) {
       debug('will report code coverage on GitHub Actions')
-      on('after:run', reportCodeCoverageGHA)
+      on('after:run', reportCodeCoverageGHACallback)
     }
   }
 
