@@ -18,7 +18,7 @@
     "effective:config": "circleci config process .circleci/config.yml | sed /^#/d",
     "types": "tsc --noEmit --allowJs *.js cypress/e2e/*.js",
     "clean": "rm -rf .nyc_output coverage",
-    "stop-only": "stop-only --folder cypress/e2e"
+    "stop-only": "stop-only --folder cypress/e2e --folder examples --skip node_modules"
   },
   "peerDependencies": {
     "cypress": ">=10.0.0"

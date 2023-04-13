@@ -8,7 +8,7 @@ it('spec a', () => {
   cy.window().invoke('sub', 2, 3).should('equal', -1)
 })
 
-it.only('goes to another origin', () => {
+it('goes to another origin', () => {
   cy.visit('index.html')
   cy.get('a[title="another site"]').click()
 })
