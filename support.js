@@ -100,31 +100,35 @@ const registerHooks = () => {
 
     const saveCoverageObject = (win) => {
       // if application code has been instrumented, the app iframe "window" has an object
-      const applicationSourceCoverage = win.__coverage__
-      if (!applicationSourceCoverage) {
-        return
-      }
+      try {
+        const applicationSourceCoverage = win.__coverage__
+        if (!applicationSourceCoverage) {
+          return
+        }
 
-      if (
-        Cypress._.find(windowCoverageObjects, {
-          coverage: applicationSourceCoverage,
-        })
-      ) {
-        // this application code coverage object is already known
-        // which can happen when combining `window:load` and `before` callbacks
-        return
-      }
+        if (
+          Cypress._.find(windowCoverageObjects, {
+            coverage: applicationSourceCoverage,
+          })
+        ) {
+          // this application code coverage object is already known
+          // which can happen when combining `window:load` and `before` callbacks
+          return
+        }
 
-      if (Cypress.spec.specType === 'component') {
-        windowCoverageObjects.push({
-          coverage: applicationSourceCoverage,
-          pathname: Cypress.spec.relative,
-        })
-      } else {
-        windowCoverageObjects.push({
-          coverage: applicationSourceCoverage,
-          pathname: win.location.pathname,
-        })
+        if (Cypress.spec.specType === 'component') {
+          windowCoverageObjects.push({
+            coverage: applicationSourceCoverage,
+            pathname: Cypress.spec.relative,
+          })
+        } else {
+          windowCoverageObjects.push({
+            coverage: applicationSourceCoverage,
+            pathname: win.location.pathname,
+          })
+        }
+      } catch {
+        // do nothing, probably cross-origin access
       }
     }
 
@@ -177,18 +181,25 @@ const registerHooks = () => {
   })
 
   after(function collectBackendCoverage() {
-    // I wish I could fail the tests if there is no code coverage information
-    // but throwing an error here does not fail the test run due to
-    // https://github.com/cypress-io/cypress/issues/2296
+    let runningEndToEndTests, isIntegrationSpec
 
-    // there might be server-side code coverage information
-    // we should grab it once after all tests finish
-    // @ts-ignore
-    const baseUrl = Cypress.config('baseUrl') || cy.state('window').origin
-    // @ts-ignore
-    const runningEndToEndTests = baseUrl !== Cypress.config('proxyUrl')
-    const specType = Cypress._.get(Cypress.spec, 'specType', 'integration')
-    const isIntegrationSpec = specType === 'integration'
+    try {
+      // I wish I could fail the tests if there is no code coverage information
+      // but throwing an error here does not fail the test run due to
+      // https://github.com/cypress-io/cypress/issues/2296
+
+      // there might be server-side code coverage information
+      // we should grab it once after all tests finish
+      // @ts-ignore
+      const baseUrl = Cypress.config('baseUrl') || cy.state('window').origin
+      // @ts-ignore
+      runningEndToEndTests = baseUrl !== Cypress.config('proxyUrl')
+      const specType = Cypress._.get(Cypress.spec, 'specType', 'integration')
+      isIntegrationSpec = specType === 'integration'
+    } catch {
+      // probably cross-origin request
+      // cannot access the window
+    }
 
     if (runningEndToEndTests && isIntegrationSpec) {
       // we can only request server-side code coverage
