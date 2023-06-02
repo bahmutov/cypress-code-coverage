@@ -7,6 +7,7 @@ const {
   excludeByUser,
   filterSupportFilesFromCoverage,
 } = require('./support-utils')
+const { isPluginDisabled } = require('./common-utils')
 
 dayjs.extend(duration)
 
@@ -300,7 +301,9 @@ const cyEnvs = Cypress._.mapKeys(Cypress.env(), (value, key) =>
   key.toLowerCase(),
 )
 
-if (cyEnvs.coverage === false) {
+const pluginDisabled = isPluginDisabled(cyEnvs)
+
+if (pluginDisabled) {
   console.log('Skipping code coverage hooks')
 } else if (Cypress.env('codeCoverageTasksRegistered') !== true) {
   // register a hook just to log a message

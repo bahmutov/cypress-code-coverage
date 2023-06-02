@@ -5,6 +5,7 @@ const { existsSync } = require('fs')
 const NYC = require('nyc')
 const debug = require('debug')('code-coverage')
 const { reportCodeCoverageGHACallback } = require('./src/utils')
+const { isPluginDisabled } = require('./common-utils')
 
 const nycFilename = getNycReportFilename(process.cwd())
 
@@ -17,7 +18,7 @@ function registerCodeCoveragePlugin(on, config) {
   // reportAfterEachSpec: 'text' = enabled "text" code coverage reporter
   // typical values: 'text-summary', 'text'
   let reportAfterEachSpec = 'text-summary'
-  let shouldReport = true
+  let shouldReport = !isPluginDisabled(config.env)
   if (
     config.env &&
     typeof config.env.coverage === 'object' &&
