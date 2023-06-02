@@ -504,6 +504,8 @@ If you have an object with coverage settings, you can still disable it
 }
 ```
 
+**Tip:** you can use `disable: true` or `disabled: true`
+
 See [Cypress environment variables](https://on.cypress.io/environment-variables) and [support.js](support.js). You can try running without code coverage in this project yourself
 
 ```shell

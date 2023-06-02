@@ -69,8 +69,9 @@ function isPluginDisabled(cyEnv) {
     return true
   }
   if (typeof cyEnv.coverage === 'object') {
-    // the user explicitly disabled
-    return cyEnv.coverage.disabled === true
+    // the user explicitly disabled the plugin
+    // be kind and accept both "disable" and "disabled" options
+    return cyEnv.coverage.disable === true || cyEnv.coverage.disabled === true
   }
 
   // by default the plugin is enabled
