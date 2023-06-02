@@ -61,9 +61,26 @@ const removePlaceholders = (coverage) => {
   })
 }
 
+/**
+ * Returns true if the user disabled the plugin using the env object.
+ */
+function isPluginDisabled(cyEnv) {
+  if (cyEnv.coverage === false) {
+    return true
+  }
+  if (typeof cyEnv.coverage === 'object') {
+    // the user explicitly disabled
+    return cyEnv.coverage.disabled === true
+  }
+
+  // by default the plugin is enabled
+  return false
+}
+
 module.exports = {
   combineNycOptions,
   defaultNycOptions,
   fileCoveragePlaceholder,
   removePlaceholders,
+  isPluginDisabled,
 }
