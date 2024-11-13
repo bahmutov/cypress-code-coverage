@@ -8,6 +8,8 @@ export default defineConfig({
       coverage: {
         // set to true to hide the messages in the Command Log
         quiet: false,
+        // intercept and instrument scripts matching these URLs
+        instrument: '**/calculator/**/*.js',
       },
     },
     // We've imported your old cypress plugins here.
