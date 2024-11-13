@@ -1,4 +1,4 @@
-# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-12.8.1-brightgreen) [![CircleCI](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main.svg?style=svg)](https://circleci.com/gh/bahmutov/cypress-code-coverage/tree/main) [![ci](https://github.com/bahmutov/cypress-code-coverage/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bahmutov/cypress-code-coverage/actions/workflows/ci.yml)
+# @bahmutov/cypress-code-coverage ![cypress version](https://img.shields.io/badge/cypress-12.8.1-brightgreen) [![ci](https://github.com/bahmutov/cypress-code-coverage/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bahmutov/cypress-code-coverage/actions/workflows/ci.yml)
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
