@@ -121,7 +121,13 @@ const registerHooks = () => {
           url: instrumentScripts,
         },
         (req) => {
-          // TODO: remove caching headers for now
+          // remove the cache headers to force the server
+          // to return the script source code
+          // Idea: we could cache the instrumented code
+          // and let the browser receive 304 status code
+          delete req.headers['if-none-match']
+          delete req.headers['if-modified-since']
+
           // @ts-ignore
           req.continue((res) => {
             const relativeUrl = req.url

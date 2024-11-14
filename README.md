@@ -120,7 +120,7 @@ export default defineConfig({
 
 This plugin will spy on the scripts requested by the application and will instrument all scripts with the URL matching the `**/calculator/**/*.js` pattern.
 
-**Note on caching:** the browser might cache the scripts. You would see 304 status response code. This should be ok, since the browser would cache _the instrumented_ source code returned after the first test run.
+**Note on caching:** the browser might cache the scripts. You would see 304 status response code. To get around this, the intercept removes caching headers "if-none-match" and "if-modified-since" from the outgoing requests for the scripts.
 
 ### More information
 
