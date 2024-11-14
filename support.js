@@ -200,10 +200,10 @@ const registerHooks = () => {
     }
 
     const config = getCoverageConfig()
-    const taskLogOptions = {
-      log: !config.quiet,
+    if (!config.quiet) {
+      cy.log(`**Reporting coverage for** ${Cypress.spec.relative}`)
     }
-    cy.task('reportSpecCovers', taskOptions, taskLogOptions)
+    cy.task('reportSpecCovers', taskOptions, { log: false })
 
     if (!hasE2ECoverage()) {
       if (hasUnitTestCoverage()) {

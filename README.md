@@ -99,6 +99,29 @@ That should be it! You should see messages from this plugin in the Cypress Comma
 
 ![Plugin messages](images/gui.png)
 
+## Instrument on the fly
+
+You can instrument the JavaScript specs the application is loading by using [cy.intercept](https://on.cypress.io/intercept) callbacks. Simply tell this plugin which JS resources to instrument using the `coverage` env object:
+
+```js
+// cypress.config.js
+
+export default defineConfig({
+  e2e: {
+    env: {
+      coverage: {
+        // intercept and instrument scripts matching these URLs
+        instrument: '**/calculator/**/*.js',
+      },
+    },
+  },
+})
+```
+
+This plugin will spy on the scripts requested by the application and will instrument all scripts with the URL matching the `**/calculator/**/*.js` pattern.
+
+**Note on caching:** the browser might cache the scripts. You would see 304 status response code. This should be ok, since the browser would cache _the instrumented_ source code returned after the first test run.
+
 ### More information
 
 - Read [Cypress Code Coverage: Instrumenting code](https://on.cypress.io/code-coverage#Instrumenting-code) guide
