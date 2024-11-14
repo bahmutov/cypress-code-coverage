@@ -9,6 +9,16 @@ const {
 } = require('./support-utils')
 const { isPluginDisabled } = require('./common-utils')
 
+// https://github.com/istanbuljs/istanbuljs
+// @ts-ignore
+const { createInstrumenter } = require('istanbul-lib-instrument')
+
+const instrumenter = createInstrumenter({
+  esModules: true,
+  compact: false,
+  preserveComments: true,
+})
+
 dayjs.extend(duration)
 
 function getCoverageConfig() {
@@ -95,6 +105,43 @@ const registerHooks = () => {
   })
 
   beforeEach(() => {
+    const instrumentScripts = Cypress.env('coverage')?.instrument
+
+    if (instrumentScripts) {
+      // the user wants Cypress to instrument the application code
+      // by intercepting the script requests and instrumenting them on the fly
+      const baseUrl = Cypress.config('baseUrl')
+      // @ts-ignore
+      const proxyServer = Cypress.config('proxyServer') + '/'
+
+      cy.intercept(
+        {
+          method: 'GET',
+          resourceType: 'script',
+          url: instrumentScripts,
+        },
+        (req) => {
+          // TODO: remove caching headers for now
+          // @ts-ignore
+          req.continue((res) => {
+            const relativeUrl = req.url
+              // @ts-ignore
+              .replace(baseUrl, '')
+              .replace(proxyServer, '')
+            // console.log('instrumenting', relativeUrl)
+
+            // @ts-ignore
+            const instrumented = instrumenter.instrumentSync(
+              res.body,
+              relativeUrl,
+            )
+            res.body = instrumented
+            return res
+          })
+        },
+      )
+    }
+
     // each object will have the coverage and url pathname
     // to let the user know the coverage has been collected
     windowCoverageObjects = []
