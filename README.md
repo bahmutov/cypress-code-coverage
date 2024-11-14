@@ -567,8 +567,9 @@ The coverage will be written into `.nyc_output` folder (which is automatically c
 
 - 🎓 Take my course [Testing The Swag Store](https://cypress.tips/courses/swag-store) that shows e2e and component code coverage
 - Read the [Cypress code coverage guide](http://on.cypress.io/code-coverage)
-- Read ["Code Coverage by Parcel Bundler"](https://glebbahmutov.com/blog/code-coverage-by-parcel/) blog post
-- Read ["Combined End-to-end and Unit Test Coverage"](https://glebbahmutov.com/blog/combined-end-to-end-and-unit-test-coverage/)
+- Read [Code Coverage by Parcel Bundler](https://glebbahmutov.com/blog/code-coverage-by-parcel/) blog post
+- Read [Combined End-to-end and Unit Test Coverage](https://glebbahmutov.com/blog/combined-end-to-end-and-unit-test-coverage/) blog post
+- Read [Code Coverage On The Fly](https://glebbahmutov.com/blog/code-coverage-on-the-fly/) blog post
 - If you are using React, check out [@cypress/instrument-cra](https://github.com/cypress-io/instrument-cra)
 - Watch videos in [Cypress Tips & Tricks](https://www.youtube.com/playlist?list=PLP9o9QNnQuAYYRpJzDNWpeuOVTwxmIxcI) playlist
 
