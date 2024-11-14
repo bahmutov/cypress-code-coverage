@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>TDD Calculator</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="calculator">
+      <div id="left-column">
+        <div id="display"></div>
+        <div id="buttons">
+          <button class="operator-btn" title="enter digit">+</button>
+          <button title="enter digit">7</button>
+          <button title="enter digit">8</button>
+          <button title="enter digit">9</button>
+          <button title="enter digit"" class="operator-btn">
+            -
+          </button>
+          <button title="enter digit">4</button>
+          <button title="enter digit">5</button>
+          <button title="enter digit">6</button>
+          <button title="enter digit" class="operator-btn">
+            *
+          </button>
+          <button title="enter digit">1</button>
+          <button title="enter digit">2</button>
+          <button title="enter digit">3</button>
+          <button title="enter digit" class="operator-btn">
+            /
+          </button>
+          <button title="enter digit">0</button>
+          <button title="enter digit">.</button>
+          <button title="calculate">=</button>
+          <button title="clear display" class="operator-btn">
+            C
+          </button>
+        </div>
+      </div>
+      <div id="right-column">
+        <div id="history">
+          <ul id="history-list"></ul>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

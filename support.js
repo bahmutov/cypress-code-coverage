@@ -9,6 +9,16 @@ const {
 } = require('./support-utils')
 const { isPluginDisabled } = require('./common-utils')
 
+// https://github.com/istanbuljs/istanbuljs
+// @ts-ignore
+const { createInstrumenter } = require('istanbul-lib-instrument')
+
+const instrumenter = createInstrumenter({
+  esModules: true,
+  compact: false,
+  preserveComments: true,
+})
+
 dayjs.extend(duration)
 
 function getCoverageConfig() {
@@ -95,6 +105,43 @@ const registerHooks = () => {
   })
 
   beforeEach(() => {
+    const instrumentScripts = Cypress.env('coverage')?.instrument
+
+    if (instrumentScripts) {
+      // the user wants Cypress to instrument the application code
+      // by intercepting the script requests and instrumenting them on the fly
+      const baseUrl = Cypress.config('baseUrl')
+      // @ts-ignore
+      const proxyServer = Cypress.config('proxyServer') + '/'
+
+      cy.intercept(
+        {
+          method: 'GET',
+          resourceType: 'script',
+          url: instrumentScripts,
+        },
+        (req) => {
+          // TODO: remove caching headers for now
+          // @ts-ignore
+          req.continue((res) => {
+            const relativeUrl = req.url
+              // @ts-ignore
+              .replace(baseUrl, '')
+              .replace(proxyServer, '')
+            // console.log('instrumenting', relativeUrl)
+
+            // @ts-ignore
+            const instrumented = instrumenter.instrumentSync(
+              res.body,
+              relativeUrl,
+            )
+            res.body = instrumented
+            return res
+          })
+        },
+      )
+    }
+
     // each object will have the coverage and url pathname
     // to let the user know the coverage has been collected
     windowCoverageObjects = []
@@ -153,10 +200,10 @@ const registerHooks = () => {
     }
 
     const config = getCoverageConfig()
-    const taskLogOptions = {
-      log: !config.quiet,
+    if (!config.quiet) {
+      cy.log(`**Reporting coverage for** ${Cypress.spec.relative}`)
     }
-    cy.task('reportSpecCovers', taskOptions, taskLogOptions)
+    cy.task('reportSpecCovers', taskOptions, { log: false })
 
     if (!hasE2ECoverage()) {
       if (hasUnitTestCoverage()) {
@@ -203,42 +250,47 @@ const registerHooks = () => {
     }
 
     if (runningEndToEndTests && isIntegrationSpec) {
-      // we can only request server-side code coverage
-      // if we are running end-to-end tests,
-      // otherwise where do we send the request?
-      const url = Cypress._.get(
-        Cypress.env('codeCoverage'),
-        'url',
-        '/__coverage__',
-      )
-      cy.request({
-        url,
-        log: false,
-        failOnStatusCode: false,
-      })
-        .then((r) => {
-          return Cypress._.get(r, 'body.coverage', null)
+      const baseUrl = Cypress.config('baseUrl')
+      if (baseUrl) {
+        // can only fetch server-side code coverage if we have a baseUrl
+
+        // we can only request server-side code coverage
+        // if we are running end-to-end tests,
+        // otherwise where do we send the request?
+        const url = Cypress._.get(
+          Cypress.env('codeCoverage'),
+          'url',
+          '/__coverage__',
+        )
+        cy.request({
+          url,
+          log: false,
+          failOnStatusCode: false,
         })
-        .then((coverage) => {
-          if (!coverage) {
-            // we did not get code coverage - this is the
-            // original failed request
-            const expectBackendCoverageOnly = Cypress._.get(
-              Cypress.env('codeCoverage'),
-              'expectBackendCoverageOnly',
-              false,
-            )
-            if (expectBackendCoverageOnly) {
-              throw new Error(
-                `Expected to collect backend code coverage from ${url}`,
+          .then((r) => {
+            return Cypress._.get(r, 'body.coverage', null)
+          })
+          .then((coverage) => {
+            if (!coverage) {
+              // we did not get code coverage - this is the
+              // original failed request
+              const expectBackendCoverageOnly = Cypress._.get(
+                Cypress.env('codeCoverage'),
+                'expectBackendCoverageOnly',
+                false,
               )
-            } else {
-              // we did not really expect to collect the backend code coverage
-              return
+              if (expectBackendCoverageOnly) {
+                throw new Error(
+                  `Expected to collect backend code coverage from ${url}`,
+                )
+              } else {
+                // we did not really expect to collect the backend code coverage
+                return
+              }
             }
-          }
-          sendCoverage(coverage, 'backend')
-        })
+            sendCoverage(coverage, 'backend')
+          })
+      }
     }
   })
 
