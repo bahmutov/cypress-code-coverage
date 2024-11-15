@@ -2,7 +2,7 @@
 
 > My version of [Cypress code coverage plugin](https://github.com/cypress-io/code-coverage)
 
-🎓 Covered in my course [Testing The Swag Store](https://cypress.tips/courses/swag-store)
+🎓 Covered in my courses [Testing The Swag Store](https://cypress.tips/courses/swag-store) and [TDD Calculator](https://cypress.tips/courses/tdd-calculator)
 
 ## Install
 
@@ -566,6 +566,7 @@ The coverage will be written into `.nyc_output` folder (which is automatically c
 ## Links
 
 - 🎓 Take my course [Testing The Swag Store](https://cypress.tips/courses/swag-store) that shows e2e and component code coverage
+- 🎓 Take my course [TDD Calculator](https://cypress.tips/courses/tdd-calculator) to see simple static app covered by E2E tests
 - Read the [Cypress code coverage guide](http://on.cypress.io/code-coverage)
 - Read [Code Coverage by Parcel Bundler](https://glebbahmutov.com/blog/code-coverage-by-parcel/) blog post
 - Read [Combined End-to-end and Unit Test Coverage](https://glebbahmutov.com/blog/combined-end-to-end-and-unit-test-coverage/) blog post
