@@ -9,16 +9,6 @@ const {
 } = require('./support-utils')
 const { isPluginDisabled } = require('./common-utils')
 
-// https://github.com/istanbuljs/istanbuljs
-// @ts-ignore
-const { createInstrumenter } = require('istanbul-lib-instrument')
-
-const instrumenter = createInstrumenter({
-  esModules: true,
-  compact: false,
-  preserveComments: true,
-})
-
 dayjs.extend(duration)
 
 function getCoverageConfig() {
@@ -110,6 +100,17 @@ const registerHooks = () => {
     if (instrumentScripts) {
       // the user wants Cypress to instrument the application code
       // by intercepting the script requests and instrumenting them on the fly
+
+      // https://github.com/istanbuljs/istanbuljs
+      // @ts-ignore
+      const { createInstrumenter } = require('istanbul-lib-instrument')
+
+      const instrumenter = createInstrumenter({
+        esModules: true,
+        compact: false,
+        preserveComments: true,
+      })
+
       const baseUrl = Cypress.config('baseUrl')
       // @ts-ignore
       const proxyServer = Cypress.config('proxyServer') + '/'
