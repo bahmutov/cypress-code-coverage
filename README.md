@@ -573,6 +573,7 @@ The coverage will be written into `.nyc_output` folder (which is automatically c
 - Read [Code Coverage On The Fly](https://glebbahmutov.com/blog/code-coverage-on-the-fly/) blog post
 - If you are using React, check out [@cypress/instrument-cra](https://github.com/cypress-io/instrument-cra)
 - Watch videos in [Cypress Tips & Tricks](https://www.youtube.com/playlist?list=PLP9o9QNnQuAYYRpJzDNWpeuOVTwxmIxcI) playlist
+- Watch video [99% Code Coverage In 9 Minutes](https://youtu.be/AgQS9Pcneto) from the repo [bahmutov/called-urls-examples](https://github.com/bahmutov/called-urls-examples)
 
 ## GitHub Actions
 
