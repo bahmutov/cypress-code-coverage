@@ -63,9 +63,9 @@ jobs:
         run: npm install semantic-release
 
       - name: Semantic Release 🚀
-        uses: cycjimmy/semantic-release-action@v4
+        # https://github.com/cycjimmy/semantic-release-action
+        uses: cycjimmy/semantic-release-action@v6
         with:
           branch: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
