@@ -5,6 +5,9 @@ const ghCore = require('@actions/core')
 const path = require('path')
 const { existsSync, readFileSync } = require('fs')
 
+/**
+ * @param {number} percentage
+ */
 function pickCoverageEmoji(percentage) {
   if (percentage >= 95) {
     return '✅'

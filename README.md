@@ -696,6 +696,7 @@ If you decide to open an issue in this repository, please fill all information t
 You can test changes locally by running tests and confirming the code coverage has been calculated and saved.
 
 ```shell
+# the coverage folder is deleted automatically
 npm run test:ci
 # now check generated coverage numbers
 npx nyc report --check-coverage true --lines 80

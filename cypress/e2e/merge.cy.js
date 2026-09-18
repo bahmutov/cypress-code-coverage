@@ -1,9 +1,9 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 const istanbul = require('istanbul-lib-coverage')
 const coverage = require('../fixtures/coverage.json')
 const {
   fileCoveragePlaceholder,
-  removePlaceholders
+  removePlaceholders,
 } = require('../../common-utils')
 
 /**
@@ -19,7 +19,7 @@ describe('merging coverage', () => {
 
   before(() => {
     expect(coverage, 'initial coverage has this file').to.have.property(
-      filename
+      filename,
     )
   })
 
@@ -51,7 +51,7 @@ describe('merging coverage', () => {
     coverageWithPlaceHolder[filename] = placeholder
 
     expect(coverageWithPlaceHolder, 'placeholder').to.deep.equal({
-      [filename]: placeholder
+      [filename]: placeholder,
     })
 
     // now lets merge full info

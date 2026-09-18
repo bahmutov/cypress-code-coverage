@@ -12,13 +12,14 @@ const { isPluginDisabled } = require('./common-utils')
 dayjs.extend(duration)
 
 function getCoverageConfig() {
-  const env = Cypress.env()
-  return env.coverage || {}
+  const exposed = Cypress.expose()
+  return exposed.coverage || {}
 }
 
 /**
  * Sends collected code coverage object to the backend code
  * via "cy.task".
+ * @param {any} coverage
  */
 const sendCoverage = (coverage, pathname = '/') => {
   const config = getCoverageConfig()
@@ -58,6 +59,9 @@ const logMessage = (message) => {
 }
 
 const registerHooks = () => {
+  /**
+   * @type {any[]} Array of coverage objects collected from the window.
+   */
   let windowCoverageObjects
 
   const hasE2ECoverage = () => Boolean(windowCoverageObjects.length)
@@ -67,6 +71,9 @@ const registerHooks = () => {
 
   before(() => {
     const config = getCoverageConfig()
+    /**
+     * @type {Cypress.Log}
+     */
     let logInstance
 
     if (!config.quiet) {
@@ -84,7 +91,7 @@ const registerHooks = () => {
       {
         // @ts-ignore
         isInteractive: Cypress.config('isInteractive'),
-        specCovers: Cypress.env('specCovers'),
+        specCovers: Cypress.expose('specCovers'),
       },
       { log: false },
     ).then(() => {
@@ -95,7 +102,7 @@ const registerHooks = () => {
   })
 
   beforeEach(() => {
-    const instrumentScripts = Cypress.env('coverage')?.instrument
+    const instrumentScripts = Cypress.expose('coverage')?.instrument
 
     if (instrumentScripts) {
       // the user wants Cypress to instrument the application code
@@ -153,9 +160,13 @@ const registerHooks = () => {
     // to let the user know the coverage has been collected
     windowCoverageObjects = []
 
+    /**
+     * @param {Cypress.AUTWindow} win
+     */
     const saveCoverageObject = (win) => {
       // if application code has been instrumented, the app iframe "window" has an object
       try {
+        // @ts-ignore
         const applicationSourceCoverage = win.__coverage__
         if (!applicationSourceCoverage) {
           return
@@ -202,8 +213,9 @@ const registerHooks = () => {
     })
 
     const taskOptions = { spec: Cypress.spec }
-    if (Cypress.env('specCovers')) {
-      taskOptions.specCovers = Cypress.env('specCovers')
+    if (Cypress.expose('specCovers')) {
+      // @ts-ignore
+      taskOptions.specCovers = Cypress.expose('specCovers')
     }
 
     const config = getCoverageConfig()
@@ -219,7 +231,7 @@ const registerHooks = () => {
         }
       } else {
         const expectBackendCoverageOnly = Cypress._.get(
-          Cypress.env('codeCoverage'),
+          Cypress.expose('codeCoverage'),
           'expectBackendCoverageOnly',
           false,
         )
@@ -265,7 +277,7 @@ const registerHooks = () => {
         // if we are running end-to-end tests,
         // otherwise where do we send the request?
         const url = Cypress._.get(
-          Cypress.env('codeCoverage'),
+          Cypress.expose('codeCoverage'),
           'url',
           '/__coverage__',
         )
@@ -282,7 +294,7 @@ const registerHooks = () => {
               // we did not get code coverage - this is the
               // original failed request
               const expectBackendCoverageOnly = Cypress._.get(
-                Cypress.env('codeCoverage'),
+                Cypress.expose('codeCoverage'),
                 'expectBackendCoverageOnly',
                 false,
               )
@@ -320,6 +332,9 @@ const registerHooks = () => {
 
   after(function generateReport() {
     const config = getCoverageConfig()
+    /**
+     * @type {Cypress.Log}
+     */
     let logInstance
 
     if (!config.quiet) {
@@ -331,7 +346,7 @@ const registerHooks = () => {
     }
 
     const options = {
-      specCovers: Cypress.env('specCovers'),
+      specCovers: Cypress.expose('specCovers'),
     }
     cy.task('coverageReport', options, {
       timeout: dayjs.duration(3, 'minutes').asMilliseconds(),
@@ -356,7 +371,7 @@ const registerHooks = () => {
 // see https://on.cypress.io/environment-variables
 
 // to avoid "coverage" env variable being case-sensitive, convert to lowercase
-const cyEnvs = Cypress._.mapKeys(Cypress.env(), (value, key) =>
+const cyEnvs = Cypress._.mapKeys(Cypress.expose(), (value, key) =>
   key.toLowerCase(),
 )
 
@@ -364,7 +379,7 @@ const pluginDisabled = isPluginDisabled(cyEnvs)
 
 if (pluginDisabled) {
   console.log('Skipping code coverage hooks')
-} else if (Cypress.env('codeCoverageTasksRegistered') !== true) {
+} else if (Cypress.expose('codeCoverageTasksRegistered') !== true) {
   // register a hook just to log a message
   before(() => {
     logMessage(`

@@ -1,7 +1,10 @@
 // @ts-check
+
+// @ts-ignore
 require('console.table')
 const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
+// @ts-ignore
 const NYC = require('nyc')
 const debug = require('debug')('code-coverage')
 const { reportCodeCoverageGHACallback } = require('./src/utils')
@@ -9,6 +12,11 @@ const { isPluginDisabled } = require('./common-utils')
 
 const nycFilename = getNycReportFilename(process.cwd())
 
+/**
+ * Registers the code coverage plugin with Cypress.
+ * @param {Function} on The Cypress "on" function to hook into events.
+ * @param {Record<string, any>} config The Cypress configuration object.
+ */
 function registerCodeCoveragePlugin(on, config) {
   require('./task')(on, config)
 
@@ -40,14 +48,21 @@ function registerCodeCoveragePlugin(on, config) {
       cwd: process.cwd(),
       reporter: reportAfterEachSpec,
     })
-    on('after:spec', (t) => {
-      console.log('code coverage after spec %s', t.relative)
-      if (existsSync(nycFilename)) {
-        return nyc.report()
-      } else {
-        console.warn('Could not find coverage file %s', nycFilename)
-      }
-    })
+
+    on(
+      'after:spec',
+      /**
+       * @param {Cypress.Spec} t The test object containing information about the spec.
+       */
+      (t) => {
+        console.log('code coverage after spec %s', t.relative)
+        if (existsSync(nycFilename)) {
+          return nyc.report()
+        } else {
+          console.warn('Could not find coverage file %s', nycFilename)
+        }
+      },
+    )
 
     if (process.env.GITHUB_ACTIONS) {
       debug('will report code coverage on GitHub Actions')

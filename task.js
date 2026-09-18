@@ -38,6 +38,9 @@ const nycReportOptions = getNycOptions(processWorkingDirectory)
 
 const nycFilename = join(nycReportOptions['temp-dir'], 'out.json')
 
+/**
+ * @param {Record<string, any>} coverage The coverage object to save.
+ */
 function saveCoverage(coverage) {
   if (!existsSync(nycReportOptions.tempDir)) {
     mkdirSync(nycReportOptions.tempDir, { recursive: true })
@@ -47,6 +50,9 @@ function saveCoverage(coverage) {
   writeFileSync(nycFilename, JSON.stringify(coverage, null, 2))
 }
 
+/**
+ * @param {string} folder
+ */
 function maybePrintFinalCoverageFiles(folder) {
   const jsonReportFilename = join(folder, 'coverage-final.json')
   if (!existsSync(jsonReportFilename)) {
@@ -99,6 +105,7 @@ const tasks = {
    *      or we will lose the coverage from previous specs.
    */
   resetCoverage(options = {}) {
+    // @ts-ignore
     const { isInteractive, specCovers } = options
     debug('reset coverage %o', options)
 
@@ -152,6 +159,7 @@ const tasks = {
     return null
   },
 
+  // @ts-ignore
   reportSpecCovers(options) {
     debug('report spec covers %o', options)
     const { specCovers, spec } = options
@@ -159,6 +167,9 @@ const tasks = {
       return null
     }
 
+    /**
+     * @type {Array<{name: string, covered: number}>}
+     */
     const specNumbers = []
     const coverage = getCoverage()
     const coverageKeys = Object.keys(coverage)
@@ -192,6 +203,7 @@ const tasks = {
       order: ['desc'],
     })
 
+    // @ts-ignore
     console.table(`spec ${spec.relative} covers`, sorted)
     // console.log('spec %s covers:', spec.relative)
 
@@ -203,9 +215,12 @@ const tasks = {
   /**
    * Saves coverage information as a JSON file and calls
    * NPM script to generate HTML report
+   *
+   * @param {Object} options The options for generating the coverage report.
    */
   coverageReport(options = {}) {
     debug('coverage report %o', options)
+    // @ts-ignore
     const { specCovers } = options
     if (specCovers) {
       debug('when using spec covers, skipping final report')
@@ -246,6 +261,7 @@ const tasks = {
 
     debug('calling NYC reporter with options %o', nycReportOptions)
     debug('current working directory is %s', process.cwd())
+    // @ts-ignore
     const NYC = require('nyc')
     const nyc = new NYC(nycReportOptions)
 
@@ -268,13 +284,17 @@ const tasks = {
  * Registers code coverage collection and reporting tasks.
  * Sets an environment variable to tell the browser code that it can
  * send the coverage.
+ *
+ * @param {Function} on The Cypress "on" function to hook into events.
+ * @param {Record<string, any>} config The Cypress configuration object.
+ *
  * @example
   ```
     // your plugins file
     module.exports = (on, config) => {
       require('cypress/code-coverage/task')(on, config)
       // IMPORTANT to return the config object
-      // with the any changed environment variables
+      // with the any changed exposed variables
       return config
     }
   ```
@@ -285,7 +305,7 @@ function registerCodeCoverageTasks(on, config) {
 
   // set a variable to let the hooks running in the browser
   // know that they can send coverage commands
-  config.env.codeCoverageTasksRegistered = true
+  config.expose.codeCoverageTasksRegistered = true
 
   return config
 }
