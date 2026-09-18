@@ -1,6 +1,6 @@
 // enables intelligent code completion for Cypress commands
 // https://on.cypress.io/intelligent-code-completion
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 import { add } from '../unit'
 const { fixSourcePaths } = require('../../support-utils')
@@ -10,11 +10,11 @@ context('Page test', () => {
     cy.visit('/', {
       onBeforeLoad(win) {
         cy.spy(win.console, 'log').as('log')
-      }
+      },
     })
   })
 
-  it('logs names', function() {
+  it('logs names', function () {
     cy.get('@log')
       .should('have.been.calledOnce')
       .should('have.been.calledWith', 'just names', ['joe', 'mary'])
@@ -44,14 +44,14 @@ context('Unit tests', () => {
         inputSourceMap: {
           sources: [
             '/folder/node_modules/cache-loader/dist/cjs.js??ref--0-0!/folder/node_modules/vue-loader/lib/index.js??vue-loader-options!component.vue?vue&type=script&lang=ts&',
-            'otherFile.js'
+            'otherFile.js',
           ],
-          sourceRoot: 'src'
-        }
+          sourceRoot: 'src',
+        },
       },
       '/folder/module-without-sourcemap.js': {
-        path: '/folder/module-without-sourcemap.js'
-      }
+        path: '/folder/module-without-sourcemap.js',
+      },
     }
 
     fixSourcePaths(coverage)
@@ -61,12 +61,12 @@ context('Unit tests', () => {
         path: '/absolute/src/component.vue',
         inputSourceMap: {
           sources: ['/absolute/src/component.vue', 'otherFile.js'],
-          sourceRoot: ''
-        }
+          sourceRoot: '',
+        },
       },
       '/folder/module-without-sourcemap.js': {
-        path: '/folder/module-without-sourcemap.js'
-      }
+        path: '/folder/module-without-sourcemap.js',
+      },
     })
   })
 })

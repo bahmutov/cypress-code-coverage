@@ -1,10 +1,11 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
+
 const { combineNycOptions, defaultNycOptions } = require('../../common-utils')
 describe('Combine NYC options', () => {
   it('overrides defaults', () => {
     const pkgNycOptions = {
       extends: '@istanbuljs/nyc-config-typescript',
-      all: true
+      all: true,
     }
     const combined = combineNycOptions(defaultNycOptions, pkgNycOptions)
     cy.wrap(combined).should('deep.equal', {
@@ -13,44 +14,44 @@ describe('Combine NYC options', () => {
       'report-dir': './coverage',
       reporter: ['lcov', 'clover', 'json', 'json-summary'],
       extension: ['.js', '.cjs', '.mjs', '.ts', '.tsx', '.jsx'],
-      excludeAfterRemap: false
+      excludeAfterRemap: false,
     })
   })
 
   it('allows to specify reporter, but changes to array', () => {
     const pkgNycOptions = {
-      reporter: 'text'
+      reporter: 'text',
     }
     const combined = combineNycOptions(defaultNycOptions, pkgNycOptions)
     cy.wrap(combined).should('deep.equal', {
       'report-dir': './coverage',
       reporter: ['text'],
       extension: ['.js', '.cjs', '.mjs', '.ts', '.tsx', '.jsx'],
-      excludeAfterRemap: false
+      excludeAfterRemap: false,
     })
   })
 
   it('combines multiple options', () => {
     const pkgNycOptions = {
       all: true,
-      extension: '.js'
+      extension: '.js',
     }
     const nycrc = {
-      include: ['foo.js']
+      include: ['foo.js'],
     }
     const nycrcJson = {
       exclude: ['bar.js'],
-      reporter: ['json']
+      reporter: ['json'],
     }
     const nycConfig = {
-      'report-dir': './report'
+      'report-dir': './report',
     }
     const combined = combineNycOptions(
       defaultNycOptions,
       nycrc,
       nycrcJson,
       nycConfig,
-      pkgNycOptions
+      pkgNycOptions,
     )
     cy.wrap(combined).should('deep.equal', {
       all: true,
@@ -59,7 +60,7 @@ describe('Combine NYC options', () => {
       extension: ['.js'],
       excludeAfterRemap: false,
       include: ['foo.js'],
-      exclude: ['bar.js']
+      exclude: ['bar.js'],
     })
   })
 
@@ -67,20 +68,20 @@ describe('Combine NYC options', () => {
     // https://github.com/cypress-io/code-coverage/issues/248
     const pkgNycOptions = {
       all: true,
-      extension: '.js'
+      extension: '.js',
     }
     const nycrc = {
-      include: ['foo.js']
+      include: ['foo.js'],
     }
     const nycrcJson = {
       exclude: 'bar.js',
-      reporter: ['json']
+      reporter: ['json'],
     }
     const combined = combineNycOptions(
       defaultNycOptions,
       nycrc,
       nycrcJson,
-      pkgNycOptions
+      pkgNycOptions,
     )
     cy.wrap(combined).should('deep.equal', {
       all: true,
@@ -89,7 +90,7 @@ describe('Combine NYC options', () => {
       extension: ['.js'],
       excludeAfterRemap: false,
       include: ['foo.js'],
-      exclude: ['bar.js']
+      exclude: ['bar.js'],
     })
   })
 })

@@ -1,4 +1,9 @@
 // @ts-check
+
+/**
+ * @param {any} prop
+ * @param {Record<string, any>} obj The object containing the property to convert to an array
+ */
 function stringToArray(prop, obj) {
   if (typeof obj[prop] === 'string') {
     obj[prop] = [obj[prop]]
@@ -7,6 +12,11 @@ function stringToArray(prop, obj) {
   return obj
 }
 
+/**
+ *
+ * @param  {...any} options
+ * @returns
+ */
 function combineNycOptions(...options) {
   // last option wins
   const nycOptions = Object.assign({}, ...options)
@@ -44,6 +54,9 @@ const fileCoveragePlaceholder = (fullPath) => {
   }
 }
 
+/**
+ * @param {Record<string, any>} entry
+ */
 const isPlaceholder = (entry) => {
   // when the file has been instrumented, its entry has "hash" property
   return !('hash' in entry)
@@ -52,6 +65,7 @@ const isPlaceholder = (entry) => {
 /**
  * Given a coverage object with potential placeholder entries
  * inserted instead of covered files, removes them. Modifies the object in place
+ * @param {Record<string, any>} coverage
  */
 const removePlaceholders = (coverage) => {
   Object.keys(coverage).forEach((key) => {
@@ -63,6 +77,7 @@ const removePlaceholders = (coverage) => {
 
 /**
  * Returns true if the user disabled the plugin using the env object.
+ * @param {Record<string, any>} cyEnv The Cypress environment object containing coverage settings
  */
 function isPluginDisabled(cyEnv) {
   if (cyEnv.coverage === false) {
