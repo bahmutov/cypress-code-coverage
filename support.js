@@ -19,6 +19,7 @@ function getCoverageConfig() {
 /**
  * Sends collected code coverage object to the backend code
  * via "cy.task".
+ * @param {any} coverage
  */
 const sendCoverage = (coverage, pathname = '/') => {
   const config = getCoverageConfig()
@@ -58,6 +59,9 @@ const logMessage = (message) => {
 }
 
 const registerHooks = () => {
+  /**
+   * @type {any[]} Array of coverage objects collected from the window.
+   */
   let windowCoverageObjects
 
   const hasE2ECoverage = () => Boolean(windowCoverageObjects.length)
@@ -67,6 +71,9 @@ const registerHooks = () => {
 
   before(() => {
     const config = getCoverageConfig()
+    /**
+     * @type {Cypress.Log}
+     */
     let logInstance
 
     if (!config.quiet) {
@@ -153,9 +160,13 @@ const registerHooks = () => {
     // to let the user know the coverage has been collected
     windowCoverageObjects = []
 
+    /**
+     * @param {Cypress.AUTWindow} win
+     */
     const saveCoverageObject = (win) => {
       // if application code has been instrumented, the app iframe "window" has an object
       try {
+        // @ts-ignore
         const applicationSourceCoverage = win.__coverage__
         if (!applicationSourceCoverage) {
           return
@@ -203,6 +214,7 @@ const registerHooks = () => {
 
     const taskOptions = { spec: Cypress.spec }
     if (Cypress.expose('specCovers')) {
+      // @ts-ignore
       taskOptions.specCovers = Cypress.expose('specCovers')
     }
 
@@ -320,6 +332,9 @@ const registerHooks = () => {
 
   after(function generateReport() {
     const config = getCoverageConfig()
+    /**
+     * @type {Cypress.Log}
+     */
     let logInstance
 
     if (!config.quiet) {

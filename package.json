@@ -75,6 +75,7 @@
     "@cypress/webpack-preprocessor": "5.10.0",
     "@types/debug": "^4.1.13",
     "@types/istanbul-lib-coverage": "^2.0.6",
+    "@types/js-yaml": "^4.0.9",
     "@types/sort-array": "^4.1.2",
     "babel-loader": "8.2.3",
     "babel-plugin-istanbul": "6.1.1",

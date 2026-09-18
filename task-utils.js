@@ -39,6 +39,7 @@ function readNycOptions(workingDirectory) {
   let nycrcYaml = {}
   if (existsSync(nycrcYamlFilename)) {
     try {
+      // @ts-ignore
       nycrcYaml = yaml.safeLoad(readFileSync(nycrcYamlFilename, 'utf8'))
     } catch (error) {
       // @ts-ignore
@@ -50,6 +51,7 @@ function readNycOptions(workingDirectory) {
   let nycrcYml = {}
   if (existsSync(nycrcYmlFilename)) {
     try {
+      // @ts-ignore
       nycrcYml = yaml.safeLoad(readFileSync(nycrcYmlFilename, 'utf8'))
     } catch (error) {
       // @ts-ignore

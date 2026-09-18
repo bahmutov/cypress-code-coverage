@@ -203,6 +203,7 @@ const tasks = {
       order: ['desc'],
     })
 
+    // @ts-ignore
     console.table(`spec ${spec.relative} covers`, sorted)
     // console.log('spec %s covers:', spec.relative)
 
