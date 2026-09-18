@@ -274,7 +274,7 @@ const tasks = {
     module.exports = (on, config) => {
       require('cypress/code-coverage/task')(on, config)
       // IMPORTANT to return the config object
-      // with the any changed environment variables
+      // with the any changed exposed variables
       return config
     }
   ```
@@ -285,7 +285,7 @@ function registerCodeCoverageTasks(on, config) {
 
   // set a variable to let the hooks running in the browser
   // know that they can send coverage commands
-  config.env.codeCoverageTasksRegistered = true
+  config.expose.codeCoverageTasksRegistered = true
 
   return config
 }

@@ -3,8 +3,9 @@ import { defineConfig } from 'cypress'
 export default defineConfig({
   viewportHeight: 200,
   viewportWidth: 200,
+  allowCypressEnv: false,
   e2e: {
-    env: {
+    expose: {
       coverage: {
         // set to true to hide the messages in the Command Log
         quiet: false,
