@@ -22,7 +22,7 @@
     "stop-only": "stop-only --folder cypress/e2e --folder examples --skip node_modules"
   },
   "peerDependencies": {
-    "cypress": ">=10.0.0"
+    "cypress": ">=15.10.0"
   },
   "repository": {
     "type": "git",
