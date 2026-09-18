@@ -74,6 +74,8 @@
     "@babel/preset-typescript": "7.16.0",
     "@cypress/webpack-preprocessor": "5.10.0",
     "@types/debug": "^4.1.13",
+    "@types/istanbul-lib-coverage": "^2.0.6",
+    "@types/sort-array": "^4.1.2",
     "babel-loader": "8.2.3",
     "babel-plugin-istanbul": "6.1.1",
     "browserify-istanbul": "3.0.1",

@@ -260,6 +260,7 @@ const tasks = {
 
     debug('calling NYC reporter with options %o', nycReportOptions)
     debug('current working directory is %s', process.cwd())
+    // @ts-ignore
     const NYC = require('nyc')
     const nyc = new NYC(nycReportOptions)
 

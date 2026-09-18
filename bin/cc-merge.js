@@ -58,6 +58,8 @@ const processWorkingDirectory = process.cwd()
 const nycReportOptions = getNycOptions(processWorkingDirectory)
 debug('calling NYC reporter with options %o', nycReportOptions)
 debug('current working directory is %s', processWorkingDirectory)
+
+// @ts-ignore
 const NYC = require('nyc')
 const nyc = new NYC(nycReportOptions)
 

@@ -15,6 +15,9 @@ const {
   fileCoveragePlaceholder,
 } = require('./common-utils')
 
+/**
+ * @param {string} workingDirectory
+ */
 function readNycOptions(workingDirectory) {
   const pkgFilename = join(workingDirectory, 'package.json')
   const pkg = existsSync(pkgFilename)
@@ -38,6 +41,7 @@ function readNycOptions(workingDirectory) {
     try {
       nycrcYaml = yaml.safeLoad(readFileSync(nycrcYamlFilename, 'utf8'))
     } catch (error) {
+      // @ts-ignore
       throw new Error(`Failed to load .nycrc.yaml: ${error.message}`)
     }
   }
@@ -48,6 +52,7 @@ function readNycOptions(workingDirectory) {
     try {
       nycrcYml = yaml.safeLoad(readFileSync(nycrcYmlFilename, 'utf8'))
     } catch (error) {
+      // @ts-ignore
       throw new Error(`Failed to load .nycrc.yml: ${error.message}`)
     }
   }
@@ -58,6 +63,7 @@ function readNycOptions(workingDirectory) {
     try {
       nycConfig = require(nycConfigFilename)
     } catch (error) {
+      // @ts-ignore
       throw new Error(`Failed to load nyc.config.js: ${error.message}`)
     }
   }
@@ -76,6 +82,9 @@ function readNycOptions(workingDirectory) {
   return nycOptions
 }
 
+/**
+ * @param {string} workingDirectory
+ */
 function getNycOptions(workingDirectory) {
   if (!workingDirectory) {
     workingDirectory = process.cwd()
@@ -106,6 +115,9 @@ function getNycOptions(workingDirectory) {
   return nycReportOptions
 }
 
+/**
+ * @param {string} workingDirectory
+ */
 function getNycReportFilename(workingDirectory) {
   const nycReportOptions = getNycOptions(workingDirectory)
 
@@ -113,6 +125,9 @@ function getNycReportFilename(workingDirectory) {
   return nycFilename
 }
 
+/**
+ * @param {string} nycFilename
+ */
 function checkAllPathsNotFound(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
 
@@ -137,6 +152,7 @@ function checkAllPathsNotFound(nycFilename) {
 
 /**
  * A small debug utility to inspect paths saved in NYC output JSON file
+ * @param {string} nycFilename
  */
 function showNycInfo(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
@@ -175,6 +191,7 @@ function showNycInfo(nycFilename) {
  * Looks at all coverage objects in the given JSON coverage file
  * and if the file is relative, and exists, changes its path to
  * be absolute.
+ * @param {string} nycFilename
  */
 function resolveRelativePaths(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
@@ -281,6 +298,9 @@ function findCommonRoot(filepaths) {
   return foundCurrentFolder
 }
 
+/**
+ * @param {string} nycFilename
+ */
 function tryFindingLocalFiles(nycFilename) {
   const nycCoverage = JSON.parse(readFileSync(nycFilename, 'utf8'))
   const coverageKeys = Object.keys(nycCoverage)
@@ -337,6 +357,8 @@ function tryFindingLocalFiles(nycFilename) {
 /**
  * Tries to find source files to be included in the final coverage report
  * using NYC options: extension list, include and exclude.
+ * @param {any} nycOptions
+ * @returns {string[]} List of source files matching the NYC options
  */
 function findSourceFiles(nycOptions) {
   debug('include all files options: %o', {
@@ -354,6 +376,9 @@ function findSourceFiles(nycOptions) {
     return []
   }
 
+  /**
+   * @type {string[]}
+   */
   let patterns = []
   if (Array.isArray(nycOptions.include)) {
     patterns = patterns.concat(nycOptions.include)
@@ -361,13 +386,23 @@ function findSourceFiles(nycOptions) {
     patterns.push(nycOptions.include)
   } else {
     debug('using default list of extensions')
-    nycOptions.extension.forEach((extension) => {
-      patterns.push('**/*' + extension)
-    })
+    nycOptions.extension.forEach(
+      /**
+       * @param {string} extension
+       */
+      (extension) => {
+        patterns.push('**/*' + extension)
+      },
+    )
   }
 
   if (Array.isArray(nycOptions.exclude)) {
-    const negated = nycOptions.exclude.map((s) => '!' + s)
+    const negated = nycOptions.exclude.map(
+      /**
+       * @param {string} s
+       */
+      (s) => '!' + s,
+    )
     patterns = patterns.concat(negated)
   } else if (typeof nycOptions.exclude === 'string') {
     patterns.push('!' + nycOptions.exclude)
@@ -389,6 +424,8 @@ function findSourceFiles(nycOptions) {
  * before generating the report.
  *
  * @see https://github.com/cypress-io/code-coverage/issues/207
+ * @param {string} nycFilename
+ * @param {any} nycOptions
  */
 function includeAllFiles(nycFilename, nycOptions) {
   if (!nycOptions.all) {
@@ -450,6 +487,10 @@ function getCoverage() {
   return json
 }
 
+/**
+ * @param {string} specName
+ * @param {any} specCovers
+ */
 function updateSpecCovers(specName, specCovers) {
   const jsonFilename = join('.', '.nyc_output', 'spec-covers.json')
   const json = existsSync(jsonFilename)

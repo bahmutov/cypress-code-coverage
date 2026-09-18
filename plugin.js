@@ -2,6 +2,7 @@
 require('console.table')
 const { getNycReportFilename } = require('./task-utils')
 const { existsSync } = require('fs')
+// @ts-ignore
 const NYC = require('nyc')
 const debug = require('debug')('code-coverage')
 const { reportCodeCoverageGHACallback } = require('./src/utils')
