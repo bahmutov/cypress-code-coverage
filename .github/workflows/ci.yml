@@ -31,7 +31,7 @@ jobs:
           start: npm start
 
   test-merge-coverage:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       DEBUG: code-coverage
     steps:
