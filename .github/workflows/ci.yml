@@ -6,14 +6,15 @@ permissions:
   pull-requests: write
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v4
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v7
 
       - name: Install dependencies 📦
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
 
@@ -24,7 +25,7 @@ jobs:
         run: npm run stop-only
 
       - name: Run tests 🧪
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           install: false
           start: npm start
@@ -35,11 +36,11 @@ jobs:
       DEBUG: code-coverage
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install dependencies 🧪
         # https://github.com/cypress-io/github-action
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
 
@@ -52,11 +53,11 @@ jobs:
 
   release:
     needs: [test, test-merge-coverage]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout 🛎
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install only the semantic release 📦
         run: npm install semantic-release
