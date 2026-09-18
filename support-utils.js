@@ -8,6 +8,7 @@ const debug = require('debug')('code-coverage')
  * remove coverage for the spec files themselves,
  * only keep "external" application source file coverage.
  * Config has keys with absolute path names for each source file
+ * @param {object} totalCoverage Each key is an absolute filepath
  */
 const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   /** @type {string|string[]} Cypress run-time config has test files string pattern */
@@ -30,20 +31,24 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
   })
   debug({ specPattern, testFilePatterns, configFilename })
 
-  const isTestFile = (filename) => {
-    debug('testing filename', filename)
-    const matchedPattern = testFilePatterns.some((specPattern) => {
-      debug('minimatch %s against %s', filename, specPattern)
-      return Cypress.minimatch(filename, specPattern)
-    })
-    const matchedEndOfPath = testFilePatterns.some((specPattern) =>
-      filename.endsWith(specPattern),
-    )
-    const matchedConfig = configFilename.endsWith(filename)
-    debug({ matchedPattern, matchedEndOfPath, matchedConfig })
+  const isTestFile =
+    /**
+     * @param {string} filename
+     */
+    (filename) => {
+      debug('testing filename', filename)
+      const matchedPattern = testFilePatterns.some((specPattern) => {
+        debug('minimatch %s against %s', filename, specPattern)
+        return Cypress.minimatch(filename, specPattern)
+      })
+      const matchedEndOfPath = testFilePatterns.some((specPattern) =>
+        filename.endsWith(specPattern),
+      )
+      const matchedConfig = configFilename.endsWith(filename)
+      debug({ matchedPattern, matchedEndOfPath, matchedConfig })
 
-    return matchedPattern || matchedEndOfPath || matchedConfig
-  }
+      return matchedPattern || matchedEndOfPath || matchedConfig
+    }
 
   const coverage = Cypress._.omitBy(totalCoverage, (fileCoverage, filename) =>
     isTestFile(filename),
@@ -57,6 +62,7 @@ const filterSpecsFromCoverage = (totalCoverage, config = Cypress.config) => {
  * Replace source-map's path by the corresponding absolute file path
  * (coverage report wouldn't work with source-map path being relative
  * or containing Webpack loaders and query parameters)
+ * @param {object} coverage Each key is an absolute filepath
  */
 function fixSourcePaths(coverage) {
   Object.values(coverage).forEach((file) => {
@@ -66,8 +72,12 @@ function fixSourcePaths(coverage) {
     if (!inputSourceMap || !fileName) return
 
     if (inputSourceMap.sourceRoot) inputSourceMap.sourceRoot = ''
-    inputSourceMap.sources = inputSourceMap.sources.map((source) =>
-      source.includes(fileName) ? absolutePath : source,
+
+    inputSourceMap.sources = inputSourceMap.sources.map(
+      /**
+       * @param {string} source
+       */
+      (source) => (source.includes(fileName) ? absolutePath : source),
     )
   })
 }
@@ -116,6 +126,7 @@ function excludeByUser(exclude, coverage) {
 /**
  * Removes support file from the coverage object.
  * If there are more files loaded from support folder, also removes them
+ * @param {object} totalCoverage Each key is an absolute filepath
  */
 const filterSupportFilesFromCoverage = (totalCoverage) => {
   const supportFile = Cypress.config('supportFile')
@@ -123,8 +134,16 @@ const filterSupportFilesFromCoverage = (totalCoverage) => {
   /** @type {string} Cypress run-time config has the support folder string */
   const supportFolder = Cypress.config('supportFolder')
 
-  const isSupportFile = (filename) => filename === supportFile
-  const isInSupportFolder = (filename) => filename.startsWith(supportFolder)
+  const isSupportFile =
+    /**
+     * @param {string} filename
+     */
+    (filename) => filename === supportFile
+  const isInSupportFolder =
+    /**
+     * @param {string} filename
+     */
+    (filename) => filename.startsWith(supportFolder)
 
   const coverage = Cypress._.omitBy(
     totalCoverage,
