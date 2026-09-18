@@ -9,6 +9,7 @@
     "cy:open": "cypress open",
     "dev": "start-test 1234 cy:open",
     "semantic-release": "semantic-release",
+    "pretest:ci": "rm -rf .nyc_output coverage",
     "test:ci": "start-test 1234",
     "report:coverage": "nyc report --reporter=html",
     "dev:no:coverage": "start-test 1234 'cypress open --env coverage=false'",
